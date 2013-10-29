@@ -172,9 +172,14 @@ namespace SpaceEditor
             coord coord = (coord)coordNode.Tag;          
             if (e.CancelEdit == true)
                 return;
+            string newValue = "0";
+            if (string.IsNullOrWhiteSpace(e.Label))
+                newValue = e.Node.Text;
+            else
+                newValue = e.Label;
             try
             {
-                coord.setValue((string)valueNode.Tag, e.Node.Text);
+                coord.setValue((string)valueNode.Tag, newValue);
             }
             catch (InvalidCastException)
             {
