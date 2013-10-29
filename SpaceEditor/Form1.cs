@@ -187,6 +187,27 @@ namespace SpaceEditor
             }
         }
 
+        private void xAxisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode node = SectorTree.SelectedNode;
+            CubeGrid cg = (CubeGrid)node.Tag;
+            cg.mirror("X", sector.rnd);
+        }
+
+        private void yAxisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode node = SectorTree.SelectedNode;
+            CubeGrid cg = (CubeGrid)node.Tag;
+            cg.mirror("Y", sector.rnd);
+        }
+
+        private void zAxisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode node = SectorTree.SelectedNode;
+            CubeGrid cg = (CubeGrid)node.Tag;
+            cg.mirror("Z", sector.rnd);
+        }
+
 
     
 

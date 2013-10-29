@@ -42,6 +42,10 @@
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importShipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mirrorBlocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.xAxisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.yAxisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.zAxisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shipmenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -59,28 +63,29 @@
             this.shipmenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exportShipMenuItem,
             this.cloneShipMenuItem,
-            this.deleteShipMenuItem});
+            this.deleteShipMenuItem,
+            this.mirrorBlocksToolStripMenuItem});
             this.shipmenu.Name = "treemenu";
-            this.shipmenu.Size = new System.Drawing.Size(123, 76);
+            this.shipmenu.Size = new System.Drawing.Size(176, 128);
             // 
             // exportShipMenuItem
             // 
             this.exportShipMenuItem.Name = "exportShipMenuItem";
-            this.exportShipMenuItem.Size = new System.Drawing.Size(122, 24);
+            this.exportShipMenuItem.Size = new System.Drawing.Size(175, 24);
             this.exportShipMenuItem.Text = "Export";
             this.exportShipMenuItem.Click += new System.EventHandler(this.exportShipMenuItem_Click);
             // 
             // cloneShipMenuItem
             // 
             this.cloneShipMenuItem.Name = "cloneShipMenuItem";
-            this.cloneShipMenuItem.Size = new System.Drawing.Size(122, 24);
+            this.cloneShipMenuItem.Size = new System.Drawing.Size(175, 24);
             this.cloneShipMenuItem.Text = "Clone";
             this.cloneShipMenuItem.Click += new System.EventHandler(this.cloneShipMenuItem_Click);
             // 
             // deleteShipMenuItem
             // 
             this.deleteShipMenuItem.Name = "deleteShipMenuItem";
-            this.deleteShipMenuItem.Size = new System.Drawing.Size(122, 24);
+            this.deleteShipMenuItem.Size = new System.Drawing.Size(175, 24);
             this.deleteShipMenuItem.Text = "Delete";
             this.deleteShipMenuItem.Click += new System.EventHandler(this.deleteShipMenuItem_Click);
             // 
@@ -117,23 +122,54 @@
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // importShipToolStripMenuItem
             // 
             this.importShipToolStripMenuItem.Name = "importShipToolStripMenuItem";
-            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
+            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.importShipToolStripMenuItem.Text = "Import Ship";
             this.importShipToolStripMenuItem.Click += new System.EventHandler(this.importShipToolStripMenuItem_Click);
+            // 
+            // mirrorBlocksToolStripMenuItem
+            // 
+            this.mirrorBlocksToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.xAxisToolStripMenuItem,
+            this.yAxisToolStripMenuItem,
+            this.zAxisToolStripMenuItem});
+            this.mirrorBlocksToolStripMenuItem.Name = "mirrorBlocksToolStripMenuItem";
+            this.mirrorBlocksToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.mirrorBlocksToolStripMenuItem.Text = "Mirror Blocks";
+            // 
+            // xAxisToolStripMenuItem
+            // 
+            this.xAxisToolStripMenuItem.Name = "xAxisToolStripMenuItem";
+            this.xAxisToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.xAxisToolStripMenuItem.Text = "X Axis";
+            this.xAxisToolStripMenuItem.Click += new System.EventHandler(this.xAxisToolStripMenuItem_Click);
+            // 
+            // yAxisToolStripMenuItem
+            // 
+            this.yAxisToolStripMenuItem.Name = "yAxisToolStripMenuItem";
+            this.yAxisToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.yAxisToolStripMenuItem.Text = "Y Axis";
+            this.yAxisToolStripMenuItem.Click += new System.EventHandler(this.yAxisToolStripMenuItem_Click);
+            // 
+            // zAxisToolStripMenuItem
+            // 
+            this.zAxisToolStripMenuItem.Name = "zAxisToolStripMenuItem";
+            this.zAxisToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.zAxisToolStripMenuItem.Text = "Z Axis";
+            this.zAxisToolStripMenuItem.Click += new System.EventHandler(this.zAxisToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -168,6 +204,10 @@
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importShipToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mirrorBlocksToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem xAxisToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem yAxisToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem zAxisToolStripMenuItem;
     }
 }
 

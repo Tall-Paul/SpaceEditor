@@ -32,7 +32,7 @@ namespace SpaceEditor
             CharacterModel = node.SelectSingleNode("CharacterModel").InnerText;
             Inventory = node.SelectSingleNode("Inventory").InnerXml;
             Console.WriteLine(Inventory);
-            Battery = node.SelectSingleNode("Battery").InnerText;
+            Battery = node.SelectSingleNode("Battery").InnerXml;
             LightEnabled = node.SelectSingleNode("LightEnabled").InnerText;
             JetpackMode = node.SelectSingleNode("JetpackMode").InnerText;
             //UsingLadder = node.SelectSingleNode("UsingLadder").Attributes.GetNamedItem("xsi:nil").Value;

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Windows.Forms;
+using System.IO;
 
 namespace SpaceEditor
 {
@@ -22,7 +23,7 @@ namespace SpaceEditor
             foreach (XmlNode block in blocks)
             {
                 CubeBlock new_block = new CubeBlock();
-                new_block.loadFromXml(block);
+                new_block.loadFromXML(block);
                 if (new_block.SubTypeName == "LargeBlockCockpit" || new_block.SubTypeName == "SmallBlockCockpit")
                     this.cockpit = new_block;
                 CubeBlocks.Add(new_block);
@@ -67,6 +68,46 @@ namespace SpaceEditor
             {
                 block.new_id(rnd);
             }
+        }
+
+        public CubeBlock loadXMLFragment(string xml,Random rnd)
+        {
+            NameTable nt = new NameTable();
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(nt);
+            nsmgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            XmlParserContext context = new XmlParserContext(null, nsmgr, null, XmlSpace.None);
+            XmlReaderSettings xset = new XmlReaderSettings();
+            xset.ConformanceLevel = ConformanceLevel.Fragment;
+            XmlReader rd = XmlReader.Create(new StringReader(xml), xset, context);
+            XmlDocument NewDoc = new XmlDocument();
+            NewDoc.Load(rd);
+            CubeBlock cb = new CubeBlock();
+            cb.loadFromXML(NewDoc.SelectSingleNode("MyObjectBuilder_CubeBlock"));
+            cb.new_id(rnd);
+            return cb;
+        }
+
+        public void mirror(string axis,Random rnd)
+        {
+            List<CubeBlock> NewCubeBlocks = new List<CubeBlock>();
+            foreach (CubeBlock cb in CubeBlocks)
+            {
+                CubeBlock new_cb = this.loadXMLFragment(cb.getXML(), rnd);
+                switch (axis)
+                {
+                    case "X":
+                        new_cb.PositionAndOrientation.position.X = -new_cb.PositionAndOrientation.position.X;
+                    break;
+                    case "Y":
+                        new_cb.PositionAndOrientation.position.Y = -new_cb.PositionAndOrientation.position.Y;
+                    break;
+                    case "Z":
+                         new_cb.PositionAndOrientation.position.Z = -new_cb.PositionAndOrientation.position.Z;
+                    break;
+                }
+                NewCubeBlocks.Add(new_cb);
+            }
+            CubeBlocks.AddRange(NewCubeBlocks);
         }
 
     }

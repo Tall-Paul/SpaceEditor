@@ -16,7 +16,7 @@ namespace SpaceEditor
         public coord Max = new coord();
         public coord Orientation = new coord();
 
-        public void loadFromXml(XmlNode node)
+        public void loadFromXML(XmlNode node)
         {
             base.loadFromXML(node);
             this.SubTypeName = node.SelectSingleNode("SubtypeName").InnerText;
