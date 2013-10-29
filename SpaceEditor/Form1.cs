@@ -22,12 +22,95 @@ namespace SpaceEditor
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            string filename = saveFileDialog1.FileName;
+            File.WriteAllText(filename, this.sector.getXML());
+        }
+
+
+        private void saveFileDialog2_FileOk(object sender, CancelEventArgs e)
+        {
+            string filename = saveFileDialog2.FileName;
+            TreeNode node = SectorTree.SelectedNode;
+            CubeGrid cg = (CubeGrid)node.Tag;
+            File.WriteAllText(filename, cg.getXML());
+        }
+
+
+
+
+        private void SectorTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            TreeNode node = SectorTree.SelectedNode;
+            SectorTree.LabelEdit = false;
+            if (node.Tag != null)
+            {
+                try
+                {
+                    EntityBase entity = (EntityBase)node.Tag;
+                    switch (entity.actualType)
+                    {
+                        case "Ship":
+                            SectorTree.SelectedNode.ContextMenuStrip = this.shipmenu;
+                            break;
+                        default:
+                            SectorTree.SelectedNode.ContextMenuStrip = null;
+                            break;
+                    }
+                }
+                catch (InvalidCastException)
+                {
+                    SectorTree.SelectedNode.ContextMenuStrip = null;
+                    try
+                    {
+                        //is it a coord?
+                        float value = float.Parse(SectorTree.SelectedNode.Text);
+                        SectorTree.LabelEdit = true;
+                        SectorTree.SelectedNode.BeginEdit();
+                    }
+                    catch (FormatException) { }
+                }
+            }
+            else
+            {              
+                SectorTree.SelectedNode.ContextMenuStrip = null;
+               
+            }
+        }
+
+        private void exportShipMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFileDialog2.ShowDialog();
+        }
+
+        private void cloneShipMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode node = SectorTree.SelectedNode;
+            CubeGrid cg = (CubeGrid)node.Tag;
+            string xml = cg.getXML();
+            //xmlout.Text = xml;
+            sector.loadCGFragment(xml);
+            SectorTree.Nodes.Clear();
+            SectorTree.Nodes.Add(sector.getTreeNode());
+        }
+
+        private void deleteShipMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode node = SectorTree.SelectedNode;
+            CubeGrid cg = (CubeGrid)node.Tag;
+            sector.CubeGrids.Remove(cg);
+            SectorTree.Nodes.Clear();
+            SectorTree.Nodes.Add(sector.getTreeNode());
+        }
+
+        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = fileopen.ShowDialog();
             if (result == DialogResult.OK)
             {
-                string file = fileopen.FileName;                                                                        
+                string file = fileopen.FileName;
                 this.sector = new Sector();
                 SectorTree.Nodes.Clear();
                 this.sector.loadFromXML(file);
@@ -39,51 +122,12 @@ namespace SpaceEditor
             }
         }
 
-        private void getxml_Click(object sender, EventArgs e)
-        {
-            TreeNode node = SectorTree.SelectedNode;
-            CubeGrid cg = (CubeGrid)node.Tag;
-            //xmlout.Text = cg.getXML();
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            TreeNode node = SectorTree.SelectedNode;
-            CubeGrid cg = (CubeGrid)node.Tag;
-            string xml = cg.getXML();
-            //xmlout.Text = xml;
-            sector.loadCGFragment(xml);
-            SectorTree.Nodes.Clear();
-            SectorTree.Nodes.Add(sector.getTreeNode());
-            
-        }
-
-        private void SaveButton_Click(object sender, EventArgs e)
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveFileDialog1.ShowDialog();
         }
 
-        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
-        {
-            string filename = saveFileDialog1.FileName;
-            File.WriteAllText(filename, this.sector.getXML());
-        }
-
-        private void Export_Click(object sender, EventArgs e)
-        {
-            saveFileDialog2.ShowDialog();
-        }
-
-        private void saveFileDialog2_FileOk(object sender, CancelEventArgs e)
-        {
-            string filename = saveFileDialog2.FileName;
-            TreeNode node = SectorTree.SelectedNode;
-            CubeGrid cg = (CubeGrid)node.Tag;
-            File.WriteAllText(filename, cg.getXML());
-        }
-
-        private void Import_Click(object sender, EventArgs e)
+        private void importShipToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = fileopen.ShowDialog();
             if (result == DialogResult.OK)
@@ -96,19 +140,23 @@ namespace SpaceEditor
             }
         }
 
-        private void deleteButton_Click(object sender, EventArgs e)
+        private void SectorTree_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            TreeNode node = SectorTree.SelectedNode;
-            CubeGrid cg = (CubeGrid)node.Tag;
-            sector.CubeGrids.Remove(cg);
-            SectorTree.Nodes.Clear();
-            SectorTree.Nodes.Add(sector.getTreeNode());
+            TreeNode valueNode = SectorTree.SelectedNode;
+            TreeNode coordNode = valueNode.Parent;
+            coord coord = (coord)coordNode.Tag;          
+            if (e.CancelEdit == true)
+                return;
+            try
+            {
+                coord.setValue((string)valueNode.Tag, e.Node.Text);
+            }
+            catch (InvalidCastException)
+            {
+                Console.WriteLine("hrm, that should have been a string");
+            }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
 
     
 

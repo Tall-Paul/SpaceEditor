@@ -28,8 +28,10 @@ namespace SpaceEditor
             Console.WriteLine("loading character");
             this.parent = parent;
             this.displayType = "Character";
+            this.actualType = "Character";
             CharacterModel = node.SelectSingleNode("CharacterModel").InnerText;
-            Inventory = node.SelectSingleNode("Inventory").InnerText;
+            Inventory = node.SelectSingleNode("Inventory").InnerXml;
+            Console.WriteLine(Inventory);
             Battery = node.SelectSingleNode("Battery").InnerText;
             LightEnabled = node.SelectSingleNode("LightEnabled").InnerText;
             JetpackMode = node.SelectSingleNode("JetpackMode").InnerText;
@@ -37,7 +39,7 @@ namespace SpaceEditor
             HeadAngle.loadFromXML(node.SelectSingleNode("HeadAngle"));
             LinearVelocity.loadFromXML(node.SelectSingleNode("LinearVelocity"));
             AutoenableJetPackDelay = node.SelectSingleNode("AutoenableJetpackDelay").InnerText;
-            
+            this.actualType = "Character";
             Console.WriteLine("Character Loaded");
         }
 

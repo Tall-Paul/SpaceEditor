@@ -28,156 +28,146 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.components = new System.ComponentModel.Container();
             this.fileopen = new System.Windows.Forms.OpenFileDialog();
-            this.SectorTree = new System.Windows.Forms.TreeView();
-            this.button2 = new System.Windows.Forms.Button();
-            this.SaveButton = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.Export = new System.Windows.Forms.Button();
             this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
-            this.Import = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.deleteButton = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.shipmenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.exportShipMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cloneShipMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteShipMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SectorTree = new System.Windows.Forms.TreeView();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.worldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importShipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.shipmenu.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(11, 21);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Load";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // SectorTree
-            // 
-            this.SectorTree.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(171)))), ((int)(((byte)(171)))));
-            this.SectorTree.Location = new System.Drawing.Point(12, 13);
-            this.SectorTree.Name = "SectorTree";
-            this.SectorTree.Size = new System.Drawing.Size(622, 416);
-            this.SectorTree.TabIndex = 2;
-            // 
-            // button2
-            // 
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button2.Location = new System.Drawing.Point(11, 79);
-            this.button2.Name = "button2";
-            this.button2.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "Clone";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // SaveButton
-            // 
-            this.SaveButton.Location = new System.Drawing.Point(11, 50);
-            this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(75, 23);
-            this.SaveButton.TabIndex = 6;
-            this.SaveButton.Text = "Save";
-            this.SaveButton.UseVisualStyleBackColor = true;
-            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // saveFileDialog1
             // 
             this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
             // 
-            // Export
-            // 
-            this.Export.Location = new System.Drawing.Point(11, 50);
-            this.Export.Name = "Export";
-            this.Export.Size = new System.Drawing.Size(75, 23);
-            this.Export.TabIndex = 7;
-            this.Export.Text = "Export";
-            this.Export.UseVisualStyleBackColor = true;
-            this.Export.Click += new System.EventHandler(this.Export_Click);
-            // 
             // saveFileDialog2
             // 
             this.saveFileDialog2.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog2_FileOk);
             // 
-            // Import
+            // shipmenu
             // 
-            this.Import.Location = new System.Drawing.Point(11, 21);
-            this.Import.Name = "Import";
-            this.Import.Size = new System.Drawing.Size(75, 23);
-            this.Import.TabIndex = 8;
-            this.Import.Text = "Import";
-            this.Import.UseMnemonic = false;
-            this.Import.UseVisualStyleBackColor = true;
-            this.Import.Click += new System.EventHandler(this.Import_Click);
+            this.shipmenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportShipMenuItem,
+            this.cloneShipMenuItem,
+            this.deleteShipMenuItem});
+            this.shipmenu.Name = "treemenu";
+            this.shipmenu.Size = new System.Drawing.Size(123, 76);
             // 
-            // groupBox1
+            // exportShipMenuItem
             // 
-            this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Controls.Add(this.SaveButton);
-            this.groupBox1.Location = new System.Drawing.Point(641, 13);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(96, 89);
-            this.groupBox1.TabIndex = 9;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "World";
+            this.exportShipMenuItem.Name = "exportShipMenuItem";
+            this.exportShipMenuItem.Size = new System.Drawing.Size(122, 24);
+            this.exportShipMenuItem.Text = "Export";
+            this.exportShipMenuItem.Click += new System.EventHandler(this.exportShipMenuItem_Click);
             // 
-            // groupBox2
+            // cloneShipMenuItem
             // 
-            this.groupBox2.Controls.Add(this.deleteButton);
-            this.groupBox2.Controls.Add(this.Import);
-            this.groupBox2.Controls.Add(this.Export);
-            this.groupBox2.Controls.Add(this.button2);
-            this.groupBox2.Location = new System.Drawing.Point(641, 108);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(96, 144);
-            this.groupBox2.TabIndex = 10;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Ship";
+            this.cloneShipMenuItem.Name = "cloneShipMenuItem";
+            this.cloneShipMenuItem.Size = new System.Drawing.Size(122, 24);
+            this.cloneShipMenuItem.Text = "Clone";
+            this.cloneShipMenuItem.Click += new System.EventHandler(this.cloneShipMenuItem_Click);
             // 
-            // deleteButton
+            // deleteShipMenuItem
             // 
-            this.deleteButton.Location = new System.Drawing.Point(11, 108);
-            this.deleteButton.Name = "deleteButton";
-            this.deleteButton.Size = new System.Drawing.Size(75, 23);
-            this.deleteButton.TabIndex = 11;
-            this.deleteButton.Text = "Delete";
-            this.deleteButton.UseVisualStyleBackColor = true;
-            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            this.deleteShipMenuItem.Name = "deleteShipMenuItem";
+            this.deleteShipMenuItem.Size = new System.Drawing.Size(122, 24);
+            this.deleteShipMenuItem.Text = "Delete";
+            this.deleteShipMenuItem.Click += new System.EventHandler(this.deleteShipMenuItem_Click);
+            // 
+            // SectorTree
+            // 
+            this.SectorTree.LabelEdit = true;
+            this.SectorTree.Location = new System.Drawing.Point(6, 34);
+            this.SectorTree.Name = "SectorTree";
+            this.SectorTree.Size = new System.Drawing.Size(629, 395);
+            this.SectorTree.TabIndex = 12;
+            this.SectorTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.SectorTree_AfterLabelEdit);
+            this.SectorTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.SectorTree_AfterSelect);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.worldToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(641, 28);
+            this.menuStrip1.TabIndex = 13;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // worldToolStripMenuItem
+            // 
+            this.worldToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadToolStripMenuItem,
+            this.saveToolStripMenuItem,
+            this.importShipToolStripMenuItem});
+            this.worldToolStripMenuItem.Name = "worldToolStripMenuItem";
+            this.worldToolStripMenuItem.Size = new System.Drawing.Size(62, 24);
+            this.worldToolStripMenuItem.Text = "World";
+            // 
+            // loadToolStripMenuItem
+            // 
+            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
+            this.loadToolStripMenuItem.Text = "Load";
+            this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // importShipToolStripMenuItem
+            // 
+            this.importShipToolStripMenuItem.Name = "importShipToolStripMenuItem";
+            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
+            this.importShipToolStripMenuItem.Text = "Import Ship";
+            this.importShipToolStripMenuItem.Click += new System.EventHandler(this.importShipToolStripMenuItem_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(749, 441);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
+            this.ClientSize = new System.Drawing.Size(641, 441);
+            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.SectorTree);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "SpaceEditor v0.8.2 (tall-paul.co.uk)";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
+            this.shipmenu.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.OpenFileDialog fileopen;
-        private System.Windows.Forms.TreeView SectorTree;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.Button Export;
         private System.Windows.Forms.SaveFileDialog saveFileDialog2;
-        private System.Windows.Forms.Button Import;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.ContextMenuStrip shipmenu;
+        private System.Windows.Forms.TreeView SectorTree;
+        private System.Windows.Forms.ToolStripMenuItem exportShipMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cloneShipMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteShipMenuItem;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem worldToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importShipToolStripMenuItem;
     }
 }
 

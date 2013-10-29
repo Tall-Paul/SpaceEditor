@@ -31,6 +31,7 @@ namespace SpaceEditor
                 this.displayType = "Large Ship";
             if (this.GridSizeEnum == "Small")
                 this.displayType = "Small Ship";
+            this.actualType = "Ship";
             //not sure what happens with stations, need to check
         }
 

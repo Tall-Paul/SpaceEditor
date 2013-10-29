@@ -15,6 +15,7 @@ namespace SpaceEditor
         public string PersistentFlags;
         public PandO PositionAndOrientation = new PandO();
         public string displayType = "Entity";
+        public string actualType = "Entity";
 
         public void loadFromXML(XmlNode node)
         {

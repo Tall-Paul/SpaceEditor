@@ -31,10 +31,23 @@ namespace SpaceEditor
 
         public TreeNode getTreeNode(string nodename){
             TreeNode node =  new TreeNode(nodename);
-            node.Nodes.Add(new TreeNode("[X]"+this.X.ToString()));
-            node.Nodes.Add(new TreeNode("[Y]"+this.Y.ToString()));
-            node.Nodes.Add(new TreeNode("[Z]"+this.Z.ToString()));
-            node.Nodes.Add(new TreeNode("[W]" + this.W.ToString()));
+            TreeNode xnode = new TreeNode(this.X.ToString());
+            xnode.Tag = "X";
+            node.Nodes.Add(xnode);
+
+
+            TreeNode ynode = new TreeNode(this.Y.ToString());
+            ynode.Tag = "Y";
+            node.Nodes.Add(ynode);
+
+            TreeNode znode = new TreeNode(this.Z.ToString());
+            znode.Tag = "Z";
+            node.Nodes.Add(znode);
+
+            TreeNode wnode = new TreeNode(this.W.ToString());
+            wnode.Tag = "W";
+            node.Nodes.Add(wnode);
+               
             node.Tag = this;
             return node;
             
@@ -55,6 +68,30 @@ namespace SpaceEditor
             }
             xml += "</" + nodename + ">\r\n";
             return xml;
+        }
+
+        public void setValue(string key, string value)
+        {
+            Console.WriteLine("setvalue called: " + key + " | " + value);
+            float newValue = 0;
+            if (float.TryParse(value,out newValue)){
+                switch (key)
+                {
+                    case "X":
+                        X = newValue;
+                        break;
+                    case "Y":
+                        Y = newValue;
+                        break;
+                    case "Z":
+                        Z = newValue;
+                        break;
+                    case "W":
+                        W = newValue;
+                        break;
+                }
+            }
+            
         }
 
 
