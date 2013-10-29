@@ -18,7 +18,7 @@ namespace SpaceEditor
     public partial class Form1 : Form
     {
         private Sector sector;
-        private string myVersion = "0.8.5";
+        private string myVersion = "0.8.6";
 
         public Form1()
         {
