@@ -12,8 +12,11 @@ Blog Category on my website: http://www.tall-paul.co.uk/category/coding/space-ed
 Currently SpaceEditor can:
 
 Load SBS files from savegames
+
 Produce a hierarcical trree view of entities in the 'World'
+
 Export / Import / Clone / Delete Ship entities
+
 Save the resulting SBS file
 
 
