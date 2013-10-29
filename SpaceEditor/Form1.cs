@@ -9,17 +9,42 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace SpaceEditor
 {
     public partial class Form1 : Form
     {
         private Sector sector;
-        
+        private string myVersion = "0.8.5";
 
         public Form1()
         {
             InitializeComponent();
+            this.Text = "SpaceEditor v" + myVersion + " (tall-paul.co.uk)";
+                try
+                {
+                    string updateInfo = (new WebClient()).DownloadString("http://www.tall-paul.co.uk/spaceedit.txt");
+                    string[] lines = Regex.Split(updateInfo, @"\r?\n|\r");
+                    Console.WriteLine(lines.Count());
+                    if (lines.Count() <= 3)
+                    {
+                        if (lines[0] != myVersion)
+                        {
+                            DialogResult dialogResult = MessageBox.Show("Version "+lines[0]+" is available. Visit the site to download it?", "New Version", MessageBoxButtons.YesNo);
+                            if (dialogResult == DialogResult.Yes)
+                            {
+                                Process.Start(lines[1]);
+                            }
+                        }
+                        
+                    } 
+                    
+                }
+                catch (Exception) { }            
+            
         }
 
 
