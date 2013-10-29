@@ -206,6 +206,8 @@ namespace SpaceEditor
             TreeNode node = SectorTree.SelectedNode;
             CubeGrid cg = (CubeGrid)node.Tag;
             cg.mirror("Z", sector.rnd);
+            SectorTree.Nodes.Clear();
+            SectorTree.Nodes.Add(sector.getTreeNode());
         }
 
 

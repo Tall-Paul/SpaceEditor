@@ -93,21 +93,32 @@ namespace SpaceEditor
             foreach (CubeBlock cb in CubeBlocks)
             {
                 CubeBlock new_cb = this.loadXMLFragment(cb.getXML(), rnd);
+                float newVal = 0;
                 switch (axis)
                 {
-                    case "X":
+                    case "X":                        
                         new_cb.PositionAndOrientation.position.X = -new_cb.PositionAndOrientation.position.X;
+                        new_cb.Min.X = -new_cb.Min.X;
+                        new_cb.Max.X = -new_cb.Max.X;
+                        newVal = new_cb.PositionAndOrientation.position.X;
                     break;
                     case "Y":
                         new_cb.PositionAndOrientation.position.Y = -new_cb.PositionAndOrientation.position.Y;
+                         new_cb.Min.Y = -new_cb.Min.Y;
+                        new_cb.Max.Y = -new_cb.Max.Y;
+                        newVal = new_cb.PositionAndOrientation.position.Y;
                     break;
-                    case "Z":
+                    case "Z":                        
                          new_cb.PositionAndOrientation.position.Z = -new_cb.PositionAndOrientation.position.Z;
+                         new_cb.Min.Z = -new_cb.Min.Z;
+                        new_cb.Max.Z = -new_cb.Max.Z;
+                         newVal = new_cb.PositionAndOrientation.position.Z;
                     break;
                 }
-                NewCubeBlocks.Add(new_cb);
+                if (newVal != -0)
+                    NewCubeBlocks.Add(new_cb);
             }
-            CubeBlocks.AddRange(NewCubeBlocks);
+            this.CubeBlocks.AddRange(NewCubeBlocks);
         }
 
     }
