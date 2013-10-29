@@ -22,6 +22,7 @@ Save the resulting SBS file
 License:  This software is released under my own, special license which is detailed in full below.
 
 1) If you use this code for anything, please give me some credit, stick a link to my website in your readme or something.
+
 2) That's it, go nuts.
 
 
