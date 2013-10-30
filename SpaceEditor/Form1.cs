@@ -27,9 +27,10 @@ namespace SpaceEditor
                 try
                 {
                     string updateInfo = (new WebClient()).DownloadString("http://www.tall-paul.co.uk/spaceedit.txt");
+                    Console.WriteLine(updateInfo);
                     string[] lines = Regex.Split(updateInfo, @"\r?\n|\r");
                     Console.WriteLine(lines.Count());
-                    if (lines.Count() <= 3)
+                    if (lines.Count() <= 10)
                     {
                         if (lines[0] != myVersion)
                         {

@@ -14,6 +14,9 @@ namespace SpaceEditor
         public List<CubeBlock> CubeBlocks = new List<CubeBlock>();
         public string GridSizeEnum;
         public CubeBlock cockpit = null;
+        public String IsStatic = "false";
+        public coord LinearVelocity = new coord();
+        public coord AngularVelocity = new coord();
 
         public void loadFromXML(XmlNode node)
         {
@@ -28,8 +31,14 @@ namespace SpaceEditor
                     this.cockpit = new_block;
                 CubeBlocks.Add(new_block);
             }
+            IsStatic = node.SelectSingleNode("IsStatic").InnerText;
+            LinearVelocity.loadFromXML(node.SelectSingleNode("LinearVelocity"));
+            AngularVelocity.loadFromXML(node.SelectSingleNode("AngularVelocity"));
             if (this.GridSizeEnum == "Large")
-                this.displayType = "Large Ship";
+                if (this.IsStatic == "true")
+                    this.displayType = "Station";
+                else
+                    this.displayType = "Large Ship";
             if (this.GridSizeEnum == "Small")
                 this.displayType = "Small Ship";
             this.actualType = "Ship";
@@ -57,6 +66,9 @@ namespace SpaceEditor
                 xml += block.getXML();
             }
             xml += "</CubeBlocks>\r\n";
+            xml += "<IsStatic>" + IsStatic + "</IsStatic>";
+            xml += LinearVelocity.getXML("LinearVelocity");
+            xml += AngularVelocity.getXML("AngularVelocity");
             xml += "</MyObjectBuilder_EntityBase>\r\n";
             return xml;
         }
