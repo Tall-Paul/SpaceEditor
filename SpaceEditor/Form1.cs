@@ -18,7 +18,7 @@ namespace SpaceEditor
     public partial class Form1 : Form
     {
         private Sector sector;
-        private string myVersion = "0.8.6";
+        private string myVersion = "0.8.7";
 
         public Form1()
         {
@@ -116,8 +116,7 @@ namespace SpaceEditor
             TreeNode node = SectorTree.SelectedNode;
             CubeGrid cg = (CubeGrid)node.Tag;
             string xml = cg.getXML();
-            //xmlout.Text = xml;
-            sector.loadCGFragment(xml);
+            sector.loadCGFragment(xml,true);
             SectorTree.Nodes.Clear();
             SectorTree.Nodes.Add(sector.getTreeNode());
         }
@@ -160,7 +159,7 @@ namespace SpaceEditor
             {
                 string filename = fileopen.FileName;
                 string xml = File.ReadAllText(filename);
-                sector.loadCGFragment(xml);
+                sector.loadCGFragment(xml,false);
                 SectorTree.Nodes.Clear();
                 SectorTree.Nodes.Add(sector.getTreeNode());
             }

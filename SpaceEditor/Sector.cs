@@ -24,7 +24,7 @@ namespace SpaceEditor
 
         public Character character = new Character();
 
-        public void loadCGFragment(string xml)
+        public void loadCGFragment(string xml,bool displace = false)
         {
             //have to jump through some hoops here to load our fragment
             NameTable nt = new NameTable();
@@ -39,7 +39,8 @@ namespace SpaceEditor
             CubeGrid new_cg = new CubeGrid();
             new_cg.loadFromXML(NewDoc.SelectSingleNode("MyObjectBuilder_EntityBase"));
             new_cg.new_id(rnd);
-            new_cg.PositionAndOrientation.position.Y += 50;
+            if (displace == true)
+                new_cg.PositionAndOrientation.position.Y += 50;
             this.CubeGrids.Add(new_cg);
         }
 
