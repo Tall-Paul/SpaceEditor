@@ -15,15 +15,24 @@ namespace SpaceEditor
         public coord Min = new coord();
         public coord Max = new coord();
         public coord Orientation = new coord();
+        public bool hasPilot = false;
+        public Character Pilot = null;
 
         public void loadFromXML(XmlNode node)
         {
             base.loadFromXML(node);
             this.SubTypeName = node.SelectSingleNode("SubtypeName").InnerText;
-            Console.WriteLine("loaded " + this.SubTypeName);
+            //Console.WriteLine("loaded " + this.SubTypeName);
             this.Min.loadFromXML(node.SelectSingleNode("Min"));
             this.Max.loadFromXML(node.SelectSingleNode("Max"));
             this.Orientation.loadFromXML(node.SelectSingleNode("Orientation"));
+            XmlNode myPilot = node.SelectSingleNode("Pilot");
+            if (myPilot != null)
+            {
+                hasPilot = true;
+                Pilot = new Character();
+                Pilot.loadFromXML(myPilot,this.EntityId);
+            }
         }
 
         public string getXML()
@@ -38,6 +47,10 @@ namespace SpaceEditor
             xml += this.Min.getXML("Min");
             xml += this.Max.getXML("Max");
             xml += this.Orientation.getXML("Orientation");
+            if (this.hasPilot == true)
+            {
+                xml += this.Pilot.getXML();
+            }
             xml += "</MyObjectBuilder_CubeBlock>\r\n";
             return xml;
         }

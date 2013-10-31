@@ -18,7 +18,7 @@ namespace SpaceEditor
     public partial class Form1 : Form
     {
         private Sector sector;
-        private string myVersion = "0.8.7";
+        private string myVersion = "0.8.8";
 
         public Form1()
         {
@@ -209,6 +209,15 @@ namespace SpaceEditor
             SectorTree.Nodes.Clear();
             SectorTree.Nodes.Add(sector.getTreeNode());
         }
+
+        private void thumbnailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode node = SectorTree.SelectedNode;
+            CubeGrid cg = (CubeGrid)node.Tag;
+            pictureBox1.Image = cg.getThumbnail();
+        }
+
+
 
 
     

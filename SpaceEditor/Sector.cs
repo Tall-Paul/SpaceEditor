@@ -64,6 +64,10 @@ namespace SpaceEditor
                             case "MyObjectBuilder_CubeGrid":
                                 CubeGrid cg = new CubeGrid();
                                 cg.loadFromXML(entity);
+                                if (cg.hasPilot == true)
+                                {
+                                    this.character = cg.Pilot;
+                                }
                                 this.CubeGrids.Add(cg);                                
                                 break;
                             case "MyObjectBuilder_Character":
