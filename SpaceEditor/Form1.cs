@@ -18,7 +18,7 @@ namespace SpaceEditor
     public partial class Form1 : Form
     {
         private Sector sector;
-        private string myVersion = "0.8.9";
+        private string myVersion = "0.9.1";
         private bool loggingEnabled = false;
         public string Log = "";
 

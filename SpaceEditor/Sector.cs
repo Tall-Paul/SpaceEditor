@@ -55,30 +55,55 @@ namespace SpaceEditor
                     this.Position.loadFromXML(SectorPosition);
                     log += "Got Sector Position\r\n";
                     XmlNodeList SectorObjects = doc.DocumentElement.SelectNodes("/MyObjectBuilder_Sector/SectorObjects/MyObjectBuilder_EntityBase");
+                    log += "Got Sector Objects\r\n";
                     foreach(XmlNode entity in SectorObjects){                        
                         string entity_type = entity.Attributes["xsi:type"].Value;                        
                         switch (entity_type)
                         {
                             case "MyObjectBuilder_VoxelMap":                                
                                 VoxelMap vm = new VoxelMap();
-                                vm.loadFromXML(entity);
-                                log += "VoxelMap "+vm.Filename+" Loaded\r\n";
-                                this.VoxelMaps.Add(vm);                                                              
+                                log += "Loading VoxelMap\r\n";
+                                try
+                                {
+                                    vm.loadFromXML(entity);
+                                    log += "VoxelMap " + vm.Filename + " Loaded\r\n";
+                                    this.VoxelMaps.Add(vm);
+                                }
+                                catch (Exception err)
+                                {
+                                    log += "Exception loading VoxelMap "+ err.Message +"\r\n";
+                                }                        
                                 break;
                             case "MyObjectBuilder_CubeGrid":
                                 CubeGrid cg = new CubeGrid();
-                                cg.loadFromXML(entity);
-                                log += cg.displayType + " with " + cg.CubeBlocks.Count() + "Blocks Loaded\r\n";
-                                if (cg.hasPilot == true)
+                                log += "Loading CubeGrid\r\n";
+                                try
                                 {
-                                    this.character = cg.Pilot;
-                                    log += "found Pilot\r\n";
+                                    cg.loadFromXML(entity);
+                                    log += cg.displayType + " with " + cg.CubeBlocks.Count() + "Blocks Loaded\r\n";
+                                    if (cg.hasPilot == true)
+                                    {
+                                        this.character = cg.Pilot;
+                                        log += "found Pilot\r\n";
+                                    }
+                                    this.CubeGrids.Add(cg);
                                 }
-                                this.CubeGrids.Add(cg);
+                                catch (Exception err)
+                                {
+                                    log += "Exception loading CubeGrid " + err.Message + "\r\n";
+                                }
                                 break;
                             case "MyObjectBuilder_Character":
-                                character.loadFromXML(entity, "sector");
-                                log += "Character Loaded\r\n";
+                                log += "Loading Character\r\n";
+                                try
+                                {
+                                    character.loadFromXML(entity, "sector");
+                                    log += "Character Loaded\r\n";
+                                }
+                                catch (Exception err)
+                                {
+                                    log += "Exception loading Character " + err.Message + "\r\n";
+                                }
                                 break;
                             default:
                                 entity_misc em = new entity_misc();
@@ -91,7 +116,8 @@ namespace SpaceEditor
                     
                 }
                 catch (Exception err) {
-                    log += "Exception! " + err.Message+"\r\n";
+                    log += "Exception! " + err.Message+" "+err.Source+"\r\n";
+                    log += "StackTrace " + err.StackTrace+"\r\n";
                 }
 
              if (character.parent == "")
