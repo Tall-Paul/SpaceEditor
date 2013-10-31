@@ -18,7 +18,9 @@ namespace SpaceEditor
     public partial class Form1 : Form
     {
         private Sector sector;
-        private string myVersion = "0.8.8";
+        private string myVersion = "0.8.9";
+        private bool loggingEnabled = false;
+        public string Log = "";
 
         public Form1()
         {
@@ -138,7 +140,10 @@ namespace SpaceEditor
                 string file = fileopen.FileName;
                 this.sector = new Sector();
                 SectorTree.Nodes.Clear();
-                this.sector.loadFromXML(file);
+                Log = this.sector.loadFromXML(file,loggingEnabled);
+                if (loggingEnabled)
+                    File.WriteAllText("./Log.txt", Log);
+                Log = "";
                 SectorTree.Nodes.Add(sector.getTreeNode());
             }
             else
@@ -215,6 +220,11 @@ namespace SpaceEditor
             TreeNode node = SectorTree.SelectedNode;
             CubeGrid cg = (CubeGrid)node.Tag;
             pictureBox1.Image = cg.getThumbnail();
+        }
+
+        private void loggingCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            loggingEnabled = loggingCheck.Checked;
         }
 
 

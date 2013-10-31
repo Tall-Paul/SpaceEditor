@@ -48,6 +48,7 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importShipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.loggingCheck = new System.Windows.Forms.CheckBox();
             this.shipmenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -165,21 +166,21 @@
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // importShipToolStripMenuItem
             // 
             this.importShipToolStripMenuItem.Name = "importShipToolStripMenuItem";
-            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
+            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.importShipToolStripMenuItem.Text = "Import Ship";
             this.importShipToolStripMenuItem.Click += new System.EventHandler(this.importShipToolStripMenuItem_Click);
             // 
@@ -192,11 +193,23 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Visible = false;
             // 
+            // loggingCheck
+            // 
+            this.loggingCheck.AutoSize = true;
+            this.loggingCheck.Location = new System.Drawing.Point(554, 7);
+            this.loggingCheck.Name = "loggingCheck";
+            this.loggingCheck.Size = new System.Drawing.Size(81, 21);
+            this.loggingCheck.TabIndex = 15;
+            this.loggingCheck.Text = "Logging";
+            this.loggingCheck.UseVisualStyleBackColor = true;
+            this.loggingCheck.CheckedChanged += new System.EventHandler(this.loggingCheck_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 436);
+            this.Controls.Add(this.loggingCheck);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.SectorTree);
@@ -235,6 +248,7 @@
         private System.Windows.Forms.ToolStripMenuItem zAxisToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolStripMenuItem thumbnailToolStripMenuItem;
+        private System.Windows.Forms.CheckBox loggingCheck;
     }
 }
 

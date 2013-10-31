@@ -44,13 +44,16 @@ namespace SpaceEditor
             this.CubeGrids.Add(new_cg);
         }
 
-        public void loadFromXML(string filename){
-            Console.WriteLine("Loading sector from " + filename);
+        public String loadFromXML(string filename,bool loggingEnabled = false){
+            String log = "";
+
+            log += "Loading Sector from " + filename + "\r\n";
              doc.Load(filename); 
              try
                     {  
                     XmlNode SectorPosition = doc.DocumentElement.SelectSingleNode("/MyObjectBuilder_Sector/Position");
                     this.Position.loadFromXML(SectorPosition);
+                    log += "Got Sector Position\r\n";
                     XmlNodeList SectorObjects = doc.DocumentElement.SelectNodes("/MyObjectBuilder_Sector/SectorObjects/MyObjectBuilder_EntityBase");
                     foreach(XmlNode entity in SectorObjects){                        
                         string entity_type = entity.Attributes["xsi:type"].Value;                        
@@ -59,19 +62,23 @@ namespace SpaceEditor
                             case "MyObjectBuilder_VoxelMap":                                
                                 VoxelMap vm = new VoxelMap();
                                 vm.loadFromXML(entity);
+                                log += "VoxelMap "+vm.Filename+" Loaded\r\n";
                                 this.VoxelMaps.Add(vm);                                                              
                                 break;
                             case "MyObjectBuilder_CubeGrid":
                                 CubeGrid cg = new CubeGrid();
                                 cg.loadFromXML(entity);
+                                log += cg.displayType + " with " + cg.CubeBlocks.Count() + "Blocks Loaded\r\n";
                                 if (cg.hasPilot == true)
                                 {
                                     this.character = cg.Pilot;
+                                    log += "found Pilot\r\n";
                                 }
-                                this.CubeGrids.Add(cg);                                
+                                this.CubeGrids.Add(cg);
                                 break;
                             case "MyObjectBuilder_Character":
                                 character.loadFromXML(entity, "sector");
+                                log += "Character Loaded\r\n";
                                 break;
                             default:
                                 entity_misc em = new entity_misc();
@@ -84,7 +91,7 @@ namespace SpaceEditor
                     
                 }
                 catch (Exception err) {
-                    
+                    log += "Exception! " + err.Message+"\r\n";
                 }
 
              if (character.parent == "")
@@ -92,9 +99,10 @@ namespace SpaceEditor
                  this.CubeGrids.Clear();
                  this.VoxelMaps.Clear();
                  this.EntityMiscs.Clear();
-                 MessageBox.Show("Unable to load world, Are you currently piloting a ship?");
-                 
+                 log += "No Character / Pilot found!!\r\n";
+                 MessageBox.Show("Unable to load world, Are you currently piloting a ship?");                 
              }
+             return log;
 
         }
 
