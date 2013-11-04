@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace SpaceEditor
 {
@@ -45,8 +46,21 @@ namespace SpaceEditor
             return xml;
         }
 
-        public void new_id(Random rnd)
+        public static string replace_id(Match m)
         {            
+            return "<EntityId>" + EntityBase.generate_new_id() + "</EntityId>";
+           
+        }
+
+        public void new_id()
+        {
+            this.EntityId = EntityBase.generate_new_id();
+        }
+
+        public static string generate_new_id()
+        {
+            //Console.WriteLine("Generating new id");
+            Random rnd = Sector.rnd;
             long min = long.MinValue;
             long max = long.MaxValue;
             ulong uRange = (ulong)(max - min);
@@ -60,7 +74,8 @@ namespace SpaceEditor
             long result = (long)(ulongRand % uRange) + min;
             //long id = long.Parse(this.EntityId);
             //id += 1;
-            this.EntityId = result.ToString();
+            return result.ToString();
+            
         }
 
     }

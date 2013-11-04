@@ -19,7 +19,7 @@ namespace SpaceEditor
     public partial class Form1 : Form
     {
         private Sector sector;
-        private string myVersion = "0.9.1";
+        private string myVersion = "0.9.2";
         private bool loggingEnabled = false;
         public string Log = "";
 
@@ -147,6 +147,7 @@ namespace SpaceEditor
                     File.WriteAllText("./Log.txt", Log);
                 Log = "";
                 SectorTree.Nodes.Add(sector.getTreeNode());
+                mirrorBlocksToolStripMenuItem.Visible = true;
             }
             else
             {
@@ -199,21 +200,25 @@ namespace SpaceEditor
         {
             TreeNode node = SectorTree.SelectedNode;
             CubeGrid cg = (CubeGrid)node.Tag;
-            cg.mirror("X", sector.rnd);
+            cg.mirror("X");
+            SectorTree.Nodes.Clear();
+            SectorTree.Nodes.Add(sector.getTreeNode());
         }
 
         private void yAxisToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TreeNode node = SectorTree.SelectedNode;
             CubeGrid cg = (CubeGrid)node.Tag;
-            cg.mirror("Y", sector.rnd);
+            cg.mirror("Y");
+            SectorTree.Nodes.Clear();
+            SectorTree.Nodes.Add(sector.getTreeNode());
         }
 
         private void zAxisToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TreeNode node = SectorTree.SelectedNode;
             CubeGrid cg = (CubeGrid)node.Tag;
-            cg.mirror("Z", sector.rnd);
+            cg.mirror("Z");
             SectorTree.Nodes.Clear();
             SectorTree.Nodes.Add(sector.getTreeNode());
         }
@@ -303,6 +308,32 @@ namespace SpaceEditor
             TreeNode node = SectorTree.SelectedNode;
             CubeGrid cg = (CubeGrid)node.Tag;
             cg.rotate_grid("Z", 1);
+        }
+
+        private void fileopen_FileOk(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void QuickLoadMenuItem1_Click(object sender, EventArgs e)
+        {
+            DialogResult result = fileopen.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string file = fileopen.FileName;
+                this.sector = new Sector();
+                SectorTree.Nodes.Clear();
+                Log = this.sector.loadFromXML(file, loggingEnabled,true);
+                if (loggingEnabled)
+                    File.WriteAllText("./Log.txt", Log);
+                Log = "";
+                SectorTree.Nodes.Add(sector.getTreeNode());
+                mirrorBlocksToolStripMenuItem.Visible = false;
+            }
+            else
+            {
+                //logger.Items.Add("Unable to load file");
+            }
         }
 
 

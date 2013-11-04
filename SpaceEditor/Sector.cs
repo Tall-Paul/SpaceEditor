@@ -17,13 +17,15 @@ namespace SpaceEditor
         public List<VoxelMap> VoxelMaps = new List<VoxelMap>();
         public List<entity_misc> EntityMiscs = new List<entity_misc>();
         private XmlDocument doc = new XmlDocument();
-        public Random rnd = new Random();
+        public static Random rnd = new Random();
         
         private TreeNode vm_nodes = new TreeNode("Asteroids / Moons");
         private TreeNode cg_nodes = new TreeNode("Ships / stations");
         private TreeNode misc_nodes = new TreeNode("Other");
 
         public Character character = new Character();
+
+        public bool quick_loaded = false;
 
        
 
@@ -49,15 +51,18 @@ namespace SpaceEditor
             XmlDocument NewDoc = new XmlDocument();
             NewDoc.Load(rd);            
             CubeGrid new_cg = new CubeGrid();
-            new_cg.loadFromXML(NewDoc.SelectSingleNode("MyObjectBuilder_EntityBase"));
-            new_cg.new_id(rnd);
+            new_cg.loadFromXML(NewDoc.SelectSingleNode("MyObjectBuilder_EntityBase"),this.quick_loaded);
+            new_cg.new_id();
             if (displace == true)
+            {
                 new_cg.PositionAndOrientation.position.Y += 50;
+            }
             return new_cg;            
         }
 
-        public String loadFromXML(string filename,bool loggingEnabled = false){
+        public String loadFromXML(string filename,bool loggingEnabled = false, bool quick_load = false){
             String log = "";
+            this.quick_loaded = quick_load;
 
             log += "Loading Sector from " + filename + "\r\n";
              doc.Load(filename); 
@@ -91,7 +96,7 @@ namespace SpaceEditor
                                 log += "Loading CubeGrid\r\n";
                                 try
                                 {
-                                    cg.loadFromXML(entity);
+                                    cg.loadFromXML(entity,quick_load);
                                     log += cg.displayType + " with " + cg.CubeBlocks.Count() + "Blocks Loaded\r\n";
                                     if (cg.hasPilot == true)
                                     {

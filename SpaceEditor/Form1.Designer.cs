@@ -54,10 +54,15 @@
             this.importShipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.loggingCheck = new System.Windows.Forms.CheckBox();
+            this.QuickLoadMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.shipmenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
+            // 
+            // fileopen
+            // 
+            this.fileopen.FileOk += new System.ComponentModel.CancelEventHandler(this.fileopen_FileOk);
             // 
             // saveFileDialog1
             // 
@@ -78,7 +83,7 @@
             this.importModuleToolStripMenuItem,
             this.rotateToolStripMenuItem});
             this.shipmenu.Name = "treemenu";
-            this.shipmenu.Size = new System.Drawing.Size(179, 200);
+            this.shipmenu.Size = new System.Drawing.Size(179, 172);
             // 
             // exportShipMenuItem
             // 
@@ -203,6 +208,7 @@
             // worldToolStripMenuItem
             // 
             this.worldToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.QuickLoadMenuItem1,
             this.loadToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.importShipToolStripMenuItem});
@@ -213,21 +219,21 @@
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // importShipToolStripMenuItem
             // 
             this.importShipToolStripMenuItem.Name = "importShipToolStripMenuItem";
-            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
+            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.importShipToolStripMenuItem.Text = "Import Ship";
             this.importShipToolStripMenuItem.Click += new System.EventHandler(this.importShipToolStripMenuItem_Click);
             // 
@@ -250,6 +256,13 @@
             this.loggingCheck.Text = "Logging";
             this.loggingCheck.UseVisualStyleBackColor = true;
             this.loggingCheck.CheckedChanged += new System.EventHandler(this.loggingCheck_CheckedChanged);
+            // 
+            // QuickLoadMenuItem1
+            // 
+            this.QuickLoadMenuItem1.Name = "QuickLoadMenuItem1";
+            this.QuickLoadMenuItem1.Size = new System.Drawing.Size(175, 24);
+            this.QuickLoadMenuItem1.Text = "Quick Load";
+            this.QuickLoadMenuItem1.Click += new System.EventHandler(this.QuickLoadMenuItem1_Click);
             // 
             // Form1
             // 
@@ -301,6 +314,7 @@
         private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem yToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem zToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem QuickLoadMenuItem1;
     }
 }
 

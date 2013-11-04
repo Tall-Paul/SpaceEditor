@@ -7,6 +7,8 @@ using System.Xml;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing;
+using System.Xml.Linq;
+using System.Text.RegularExpressions;
 
 namespace SpaceEditor
 {
@@ -22,33 +24,49 @@ namespace SpaceEditor
         public Character Pilot = null;
         public string raw = "";
         public bool dirty = false;
+        public bool quick_loaded = false;
+        public int quick_count = 0;
         
 
-        public void loadFromXML(XmlNode node)
-        {
-            this.raw = node.OuterXml;
+        public void loadFromXML(XmlNode node, bool quick = false)
+        {            
             base.loadFromXML(node);
             this.GridSizeEnum = node.SelectSingleNode("GridSizeEnum").InnerText;
-            XmlNodeList blocks = node.SelectNodes("CubeBlocks/MyObjectBuilder_CubeBlock");            
-            foreach (XmlNode block in blocks)
+            this.quick_loaded = quick;
+            XmlNodeList blocks = node.SelectNodes("CubeBlocks/MyObjectBuilder_CubeBlock");
+            if (quick == false)
             {
-                CubeBlock new_block = new CubeBlock();
-                new_block.loadFromXML(block);
-                if (new_block.SubTypeName == "LargeBlockCockpit" || new_block.SubTypeName == "SmallBlockCockpit")
+                Console.WriteLine("Loading blocks...");
+                foreach (XmlNode block in blocks)
                 {
-                    this.cockpit = new_block;
-                    if (new_block.hasPilot == true)
+                    CubeBlock new_block = new CubeBlock();
+                    new_block.loadFromXML(block);
+                    if (new_block.SubTypeName == "LargeBlockCockpit" || new_block.SubTypeName == "SmallBlockCockpit")
                     {
-                        this.hasPilot = true;
-                        new_block.Pilot.parent = this.EntityId;
-                        Pilot = new_block.Pilot;
+                        this.cockpit = new_block;
+                        if (new_block.hasPilot == true)
+                        {
+                            this.hasPilot = true;
+                            new_block.Pilot.parent = this.EntityId;
+                            Pilot = new_block.Pilot;
+                        }
                     }
+                    CubeBlocks.Add(new_block);
                 }
-                CubeBlocks.Add(new_block);
             }
-            IsStatic = node.SelectSingleNode("IsStatic").InnerText;
-            LinearVelocity.loadFromXML(node.SelectSingleNode("LinearVelocity"));
-            AngularVelocity.loadFromXML(node.SelectSingleNode("AngularVelocity"));
+            else
+            {
+                this.raw = node.SelectSingleNode("CubeBlocks").OuterXml;
+                Console.WriteLine("Quick loaded");
+                this.quick_count = blocks.Count;
+            }
+            try
+            {
+                IsStatic = node.SelectSingleNode("IsStatic").InnerText;            
+                LinearVelocity.loadFromXML(node.SelectSingleNode("LinearVelocity"));
+                AngularVelocity.loadFromXML(node.SelectSingleNode("AngularVelocity"));
+            }
+            catch (NullReferenceException) { }
             if (this.GridSizeEnum == "Large")
                 if (this.IsStatic == "true")
                     this.displayType = "Station";
@@ -60,8 +78,9 @@ namespace SpaceEditor
             {
                 this.displayType = "[*] " + this.displayType;
             }
-            this.actualType = "Ship";
-            Console.WriteLine("Loaded "+displayType+" with "+CubeBlocks.Count +" blocks");
+            this.actualType = "Ship";             
+            Console.WriteLine("Loaded");
+            //Console.WriteLine("Loaded "+displayType+" with "+CubeBlocks.Count +" blocks");
         }
 
         /*
@@ -146,30 +165,42 @@ namespace SpaceEditor
         public TreeNode getTreeNode()
         {
             TreeNode node = base.getTreeNode();
-            if (cockpit != null)
-                node.Nodes.Add("[cockpit] " + cockpit.EntityId);
-            node.Nodes.Add("[blockCount] " + CubeBlocks.Count());
-            CubeBlock attachmentPoint = this.getBlock("LargeBlockArmorSlopeWhite");
-            if (attachmentPoint != null)
+            if (quick_loaded == false)
             {
-                TreeNode block = new TreeNode(attachmentPoint.SubTypeName);
-                block.Nodes.Add("Up " + attachmentPoint.PositionAndOrientation.up.ToString());
-                block.Nodes.Add("Forward " + attachmentPoint.PositionAndOrientation.forward.ToString());
-                block.Nodes.Add("Orientation " + attachmentPoint.Orientation.ToString());
-                node.Nodes.Add(block);
+                if (cockpit != null)
+                    node.Nodes.Add("[cockpit] " + cockpit.EntityId);
+                node.Nodes.Add("[blockCount] " + CubeBlocks.Count());
+                CubeBlock attachmentPoint = this.getBlock("LargeBlockArmorSlopeWhite");
+                if (attachmentPoint != null)
+                {
+                    TreeNode block = new TreeNode(attachmentPoint.SubTypeName);
+                    block.Nodes.Add("Up " + attachmentPoint.PositionAndOrientation.up.ToString());
+                    block.Nodes.Add("Forward " + attachmentPoint.PositionAndOrientation.forward.ToString());
+                    block.Nodes.Add("Orientation " + attachmentPoint.Orientation.ToString());
+                    node.Nodes.Add(block);
+                }
             }
-
-                
+            else
+            {
+                node.Nodes.Add("[blockCount] " + this.quick_count);
+            }
             node.Tag = this;
             return node;
         }
 
         public string getXML()
         {
-            if (dirty == false)
+            if (dirty == false  || quick_loaded == true)
             {
-                Console.WriteLine("Exporting raw xml");
-                return this.raw;
+                string xml = "<MyObjectBuilder_EntityBase xsi:type='MyObjectBuilder_CubeGrid'>\r\n";
+                xml += base.getXML();
+                xml += "<GridSizeEnum>" + this.GridSizeEnum + "</GridSizeEnum>\r\n";
+                xml += this.raw;
+                xml += "<IsStatic>" + IsStatic + "</IsStatic>";
+                xml += LinearVelocity.getXML("LinearVelocity");
+                xml += AngularVelocity.getXML("AngularVelocity");
+                xml += "</MyObjectBuilder_EntityBase>\r\n";
+                return xml;
             }
             else
             {
@@ -185,23 +216,31 @@ namespace SpaceEditor
                 xml += "<IsStatic>" + IsStatic + "</IsStatic>";
                 xml += LinearVelocity.getXML("LinearVelocity");
                 xml += AngularVelocity.getXML("AngularVelocity");
-                xml += "</MyObjectBuilder_EntityBase>\r\n";
-                this.raw = xml;
-                this.dirty = false;
+                xml += "</MyObjectBuilder_EntityBase>\r\n";               
                 return xml;
             }
         }
 
-        public void new_id(Random rnd)
+        public void new_id()
         {
-            base.new_id(rnd);
-            foreach (CubeBlock block in this.CubeBlocks)
+            base.new_id();
+            if (this.quick_loaded == false)
             {
-                block.new_id(rnd);
+                
+                foreach (CubeBlock block in this.CubeBlocks)
+                {
+                    block.new_id();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Doing replacement");
+                Regex rgex = new Regex(@"<EntityId>\s*(.+?)\s*</EntityId>");
+                this.raw = rgex.Replace(this.raw,new MatchEvaluator(EntityBase.replace_id));                
             }
         }
 
-        public CubeBlock loadXMLFragment(string xml,Random rnd)
+        public CubeBlock loadXMLFragment(string xml)
         {
             NameTable nt = new NameTable();
             XmlNamespaceManager nsmgr = new XmlNamespaceManager(nt);
@@ -214,16 +253,16 @@ namespace SpaceEditor
             NewDoc.Load(rd);
             CubeBlock cb = new CubeBlock();
             cb.loadFromXML(NewDoc.SelectSingleNode("MyObjectBuilder_CubeBlock"));
-            cb.new_id(rnd);
+            cb.new_id();
             return cb;
         }
 
-        public void mirror(string axis,Random rnd)
+        public void mirror(string axis)
         {
             List<CubeBlock> NewCubeBlocks = new List<CubeBlock>();
             foreach (CubeBlock cb in CubeBlocks)
             {
-                CubeBlock new_cb = this.loadXMLFragment(cb.getXML(), rnd);
+                CubeBlock new_cb = this.loadXMLFragment(cb.getXML());
                 double newVal = 0;
                 switch (axis)
                 {
