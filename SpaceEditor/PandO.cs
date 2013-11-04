@@ -39,5 +39,33 @@ namespace SpaceEditor
             xml += "</PositionAndOrientation>\r\n";
             return xml;
         }
+
+        public bool isZero()
+        {
+            return this.position.isZero();
+        }
+
+        public PandO clone()
+        {
+            PandO newClone = new PandO();
+            newClone.position = this.position.clone();
+            newClone.up = this.up.clone();
+            newClone.forward = this.forward.clone();
+            return newClone;
+        }
+
+        public void rotate_grid(string axis, int steps = 1)
+        {
+            //Console.WriteLine("rotating p&o " + steps + " axis " + axis);
+            this.position.rotate_grid(axis, steps);
+            //Console.WriteLine("old forward: " + this.forward.ToString());
+            this.forward.rotate_grid(axis, steps);
+            //Console.WriteLine("new forward: " + this.forward.ToString());
+            //Console.WriteLine("old up: " + this.up.ToString());
+            this.up.rotate_grid(axis, steps);
+            //Console.WriteLine("new up: " + this.up.ToString());
+            
+            
+        }
     }
 }

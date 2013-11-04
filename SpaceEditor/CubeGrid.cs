@@ -20,10 +20,13 @@ namespace SpaceEditor
         public coord AngularVelocity = new coord();
         public bool hasPilot = false;
         public Character Pilot = null;
+        public string raw = "";
+        public bool dirty = false;
         
 
         public void loadFromXML(XmlNode node)
         {
+            this.raw = node.OuterXml;
             base.loadFromXML(node);
             this.GridSizeEnum = node.SelectSingleNode("GridSizeEnum").InnerText;
             XmlNodeList blocks = node.SelectNodes("CubeBlocks/MyObjectBuilder_CubeBlock");            
@@ -146,26 +149,47 @@ namespace SpaceEditor
             if (cockpit != null)
                 node.Nodes.Add("[cockpit] " + cockpit.EntityId);
             node.Nodes.Add("[blockCount] " + CubeBlocks.Count());
+            CubeBlock attachmentPoint = this.getBlock("LargeBlockArmorSlopeWhite");
+            if (attachmentPoint != null)
+            {
+                TreeNode block = new TreeNode(attachmentPoint.SubTypeName);
+                block.Nodes.Add("Up " + attachmentPoint.PositionAndOrientation.up.ToString());
+                block.Nodes.Add("Forward " + attachmentPoint.PositionAndOrientation.forward.ToString());
+                block.Nodes.Add("Orientation " + attachmentPoint.Orientation.ToString());
+                node.Nodes.Add(block);
+            }
+
+                
             node.Tag = this;
             return node;
         }
 
         public string getXML()
         {
-            string xml = "<MyObjectBuilder_EntityBase xsi:type='MyObjectBuilder_CubeGrid'>\r\n";
-            xml += base.getXML();
-            xml += "<GridSizeEnum>" + this.GridSizeEnum + "</GridSizeEnum>\r\n";
-            xml += "<CubeBlocks>\r\n";
-            foreach (CubeBlock block in this.CubeBlocks)
+            if (dirty == false)
             {
-                xml += block.getXML();
+                Console.WriteLine("Exporting raw xml");
+                return this.raw;
             }
-            xml += "</CubeBlocks>\r\n";
-            xml += "<IsStatic>" + IsStatic + "</IsStatic>";
-            xml += LinearVelocity.getXML("LinearVelocity");
-            xml += AngularVelocity.getXML("AngularVelocity");
-            xml += "</MyObjectBuilder_EntityBase>\r\n";
-            return xml;
+            else
+            {
+                string xml = "<MyObjectBuilder_EntityBase xsi:type='MyObjectBuilder_CubeGrid'>\r\n";
+                xml += base.getXML();
+                xml += "<GridSizeEnum>" + this.GridSizeEnum + "</GridSizeEnum>\r\n";
+                xml += "<CubeBlocks>\r\n";
+                foreach (CubeBlock block in this.CubeBlocks)
+                {
+                    xml += block.getXML();
+                }
+                xml += "</CubeBlocks>\r\n";
+                xml += "<IsStatic>" + IsStatic + "</IsStatic>";
+                xml += LinearVelocity.getXML("LinearVelocity");
+                xml += AngularVelocity.getXML("AngularVelocity");
+                xml += "</MyObjectBuilder_EntityBase>\r\n";
+                this.raw = xml;
+                this.dirty = false;
+                return xml;
+            }
         }
 
         public void new_id(Random rnd)
@@ -200,7 +224,7 @@ namespace SpaceEditor
             foreach (CubeBlock cb in CubeBlocks)
             {
                 CubeBlock new_cb = this.loadXMLFragment(cb.getXML(), rnd);
-                float newVal = 0;
+                double newVal = 0;
                 switch (axis)
                 {
                     case "X":                        
@@ -226,6 +250,59 @@ namespace SpaceEditor
                     NewCubeBlocks.Add(new_cb);
             }
             this.CubeBlocks.AddRange(NewCubeBlocks);
+        }
+
+        public CubeBlock getBlock(string SubTypeName)
+        {
+            foreach (CubeBlock cb in CubeBlocks)
+            {
+                Console.WriteLine(cb.SubTypeName);
+                if (cb.SubTypeName == SubTypeName)
+                    return cb;
+            }
+            return null;
+        }
+
+        public void reOrient(PandO offset_pando, coord offset_min, coord offset_max){
+            this.dirty = true;
+            foreach (CubeBlock cb in CubeBlocks)
+            {
+                cb.PositionAndOrientation.position.offset(offset_pando.position);
+                cb.Min.offset(offset_min);
+                cb.Max.offset(offset_max);
+            }
+        }
+
+        public void reOrient(CubeBlock new_anchor)
+        {
+            this.dirty = true;
+            reOrient(new_anchor.PositionAndOrientation.clone(), new_anchor.Min.clone(), new_anchor.Max.clone());
+        }
+
+        public void merge(CubeGrid newGrid)
+        {
+            this.dirty = true;
+            foreach (CubeBlock cb in newGrid.CubeBlocks)
+            {
+                if (!cb.isAnchor())
+                    this.CubeBlocks.Add(cb);
+            }
+        }
+
+        public void rotate_grid(string axis, int steps)
+        {
+            this.dirty = true;
+            Console.WriteLine("################## Rotate " + axis + " " + steps+ "##########################");
+            if (steps == 0)
+                return;
+            foreach (CubeBlock cb in CubeBlocks)
+            {
+                Console.WriteLine("Rotating " + cb.SubTypeName);
+                cb.PositionAndOrientation.rotate_grid(axis, steps);
+                cb.Min.rotate_grid(axis, steps);
+                cb.Max.rotate_grid(axis, steps);
+                cb.Orientation.rotate_grid(axis, steps);
+            }
         }
 
     }

@@ -55,6 +55,11 @@ namespace SpaceEditor
             return xml;
         }
 
+        public bool isAnchor()
+        {
+            return this.PositionAndOrientation.isZero();
+        }
+
        
 
 

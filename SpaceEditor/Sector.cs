@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Windows.Forms;
 using System.IO;
+using System.Windows.Media.Media3D;
 
 namespace SpaceEditor
 {
@@ -24,7 +25,18 @@ namespace SpaceEditor
 
         public Character character = new Character();
 
-        public void loadCGFragment(string xml,bool displace = false)
+       
+
+        public static Vector3D diff_orientation(CubeBlock block1, CubeBlock block2)
+        {
+            Quaternion orientation_1 = new Quaternion(block1.Orientation.X, block1.Orientation.Y, block1.Orientation.Z, block1.Orientation.W);
+            Quaternion orientation_2 = new Quaternion(block2.Orientation.X, block2.Orientation.Y, block2.Orientation.Z, block2.Orientation.W);
+            orientation_2.Invert();
+            Quaternion q = orientation_1 * orientation_2;
+            return coord.quat_to_radians(q);            
+        }
+
+        public CubeGrid loadCGFragment(string xml,bool displace = false)
         {
             //have to jump through some hoops here to load our fragment
             NameTable nt = new NameTable();
@@ -41,7 +53,7 @@ namespace SpaceEditor
             new_cg.new_id(rnd);
             if (displace == true)
                 new_cg.PositionAndOrientation.position.Y += 50;
-            this.CubeGrids.Add(new_cg);
+            return new_cg;            
         }
 
         public String loadFromXML(string filename,bool loggingEnabled = false){

@@ -41,6 +41,11 @@
             this.yAxisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zAxisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.thumbnailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importModuleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rotateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.yToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.zToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SectorTree = new System.Windows.Forms.TreeView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.worldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,28 +74,30 @@
             this.cloneShipMenuItem,
             this.deleteShipMenuItem,
             this.mirrorBlocksToolStripMenuItem,
-            this.thumbnailToolStripMenuItem});
+            this.thumbnailToolStripMenuItem,
+            this.importModuleToolStripMenuItem,
+            this.rotateToolStripMenuItem});
             this.shipmenu.Name = "treemenu";
-            this.shipmenu.Size = new System.Drawing.Size(166, 124);
+            this.shipmenu.Size = new System.Drawing.Size(179, 200);
             // 
             // exportShipMenuItem
             // 
             this.exportShipMenuItem.Name = "exportShipMenuItem";
-            this.exportShipMenuItem.Size = new System.Drawing.Size(165, 24);
+            this.exportShipMenuItem.Size = new System.Drawing.Size(178, 24);
             this.exportShipMenuItem.Text = "Export";
             this.exportShipMenuItem.Click += new System.EventHandler(this.exportShipMenuItem_Click);
             // 
             // cloneShipMenuItem
             // 
             this.cloneShipMenuItem.Name = "cloneShipMenuItem";
-            this.cloneShipMenuItem.Size = new System.Drawing.Size(165, 24);
+            this.cloneShipMenuItem.Size = new System.Drawing.Size(178, 24);
             this.cloneShipMenuItem.Text = "Clone";
             this.cloneShipMenuItem.Click += new System.EventHandler(this.cloneShipMenuItem_Click);
             // 
             // deleteShipMenuItem
             // 
             this.deleteShipMenuItem.Name = "deleteShipMenuItem";
-            this.deleteShipMenuItem.Size = new System.Drawing.Size(165, 24);
+            this.deleteShipMenuItem.Size = new System.Drawing.Size(178, 24);
             this.deleteShipMenuItem.Text = "Delete";
             this.deleteShipMenuItem.Click += new System.EventHandler(this.deleteShipMenuItem_Click);
             // 
@@ -101,7 +108,7 @@
             this.yAxisToolStripMenuItem,
             this.zAxisToolStripMenuItem});
             this.mirrorBlocksToolStripMenuItem.Name = "mirrorBlocksToolStripMenuItem";
-            this.mirrorBlocksToolStripMenuItem.Size = new System.Drawing.Size(165, 24);
+            this.mirrorBlocksToolStripMenuItem.Size = new System.Drawing.Size(178, 24);
             this.mirrorBlocksToolStripMenuItem.Text = "Mirror Blocks";
             // 
             // xAxisToolStripMenuItem
@@ -128,10 +135,50 @@
             // thumbnailToolStripMenuItem
             // 
             this.thumbnailToolStripMenuItem.Name = "thumbnailToolStripMenuItem";
-            this.thumbnailToolStripMenuItem.Size = new System.Drawing.Size(165, 24);
+            this.thumbnailToolStripMenuItem.Size = new System.Drawing.Size(178, 24);
             this.thumbnailToolStripMenuItem.Text = "Thumbnail";
             this.thumbnailToolStripMenuItem.Visible = false;
             this.thumbnailToolStripMenuItem.Click += new System.EventHandler(this.thumbnailToolStripMenuItem_Click);
+            // 
+            // importModuleToolStripMenuItem
+            // 
+            this.importModuleToolStripMenuItem.Name = "importModuleToolStripMenuItem";
+            this.importModuleToolStripMenuItem.Size = new System.Drawing.Size(178, 24);
+            this.importModuleToolStripMenuItem.Text = "Import Module";
+            this.importModuleToolStripMenuItem.Visible = false;
+            this.importModuleToolStripMenuItem.Click += new System.EventHandler(this.importModuleToolStripMenuItem_Click);
+            // 
+            // rotateToolStripMenuItem
+            // 
+            this.rotateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.xToolStripMenuItem,
+            this.yToolStripMenuItem,
+            this.zToolStripMenuItem});
+            this.rotateToolStripMenuItem.Name = "rotateToolStripMenuItem";
+            this.rotateToolStripMenuItem.Size = new System.Drawing.Size(178, 24);
+            this.rotateToolStripMenuItem.Text = "Rotate";
+            this.rotateToolStripMenuItem.Visible = false;
+            // 
+            // xToolStripMenuItem
+            // 
+            this.xToolStripMenuItem.Name = "xToolStripMenuItem";
+            this.xToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.xToolStripMenuItem.Text = "X";
+            this.xToolStripMenuItem.Click += new System.EventHandler(this.xToolStripMenuItem_Click);
+            // 
+            // yToolStripMenuItem
+            // 
+            this.yToolStripMenuItem.Name = "yToolStripMenuItem";
+            this.yToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.yToolStripMenuItem.Text = "Y";
+            this.yToolStripMenuItem.Click += new System.EventHandler(this.yToolStripMenuItem_Click);
+            // 
+            // zToolStripMenuItem
+            // 
+            this.zToolStripMenuItem.Name = "zToolStripMenuItem";
+            this.zToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.zToolStripMenuItem.Text = "Z";
+            this.zToolStripMenuItem.Click += new System.EventHandler(this.zToolStripMenuItem_Click);
             // 
             // SectorTree
             // 
@@ -166,21 +213,21 @@
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // importShipToolStripMenuItem
             // 
             this.importShipToolStripMenuItem.Name = "importShipToolStripMenuItem";
-            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
             this.importShipToolStripMenuItem.Text = "Import Ship";
             this.importShipToolStripMenuItem.Click += new System.EventHandler(this.importShipToolStripMenuItem_Click);
             // 
@@ -249,6 +296,11 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolStripMenuItem thumbnailToolStripMenuItem;
         private System.Windows.Forms.CheckBox loggingCheck;
+        private System.Windows.Forms.ToolStripMenuItem importModuleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rotateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem yToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem zToolStripMenuItem;
     }
 }
 

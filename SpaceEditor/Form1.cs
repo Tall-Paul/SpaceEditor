@@ -12,13 +12,14 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Windows.Media.Media3D;
 
 namespace SpaceEditor
 {
     public partial class Form1 : Form
     {
         private Sector sector;
-        private string myVersion = "0.9.0";
+        private string myVersion = "0.9.1";
         private bool loggingEnabled = false;
         public string Log = "";
 
@@ -118,7 +119,8 @@ namespace SpaceEditor
             TreeNode node = SectorTree.SelectedNode;
             CubeGrid cg = (CubeGrid)node.Tag;
             string xml = cg.getXML();
-            sector.loadCGFragment(xml,true);
+            CubeGrid newGrid = sector.loadCGFragment(xml,true);
+            sector.CubeGrids.Add(newGrid);
             SectorTree.Nodes.Clear();
             SectorTree.Nodes.Add(sector.getTreeNode());
         }
@@ -164,7 +166,8 @@ namespace SpaceEditor
             {
                 string filename = fileopen.FileName;
                 string xml = File.ReadAllText(filename);
-                sector.loadCGFragment(xml,false);
+                CubeGrid new_cg = sector.loadCGFragment(xml,false);
+                sector.CubeGrids.Add(new_cg);
                 SectorTree.Nodes.Clear();
                 SectorTree.Nodes.Add(sector.getTreeNode());
             }
@@ -225,6 +228,81 @@ namespace SpaceEditor
         private void loggingCheck_CheckedChanged(object sender, EventArgs e)
         {
             loggingEnabled = loggingCheck.Checked;
+        }
+
+        
+
+        
+
+        private void importModuleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode node = SectorTree.SelectedNode;
+            CubeGrid cg = (CubeGrid)node.Tag;
+            DialogResult result = fileopen.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string filename = fileopen.FileName;
+                string xml = File.ReadAllText(filename);
+                CubeGrid module = sector.loadCGFragment(xml, false);
+                CubeBlock module_attachment_point = module.getBlock("LargeBlockArmorSlopeWhite");
+                if (module_attachment_point != null)
+                {
+                    //Console.WriteLine("Got module attachment");
+                    TreeNode main_node = SectorTree.SelectedNode;
+                    CubeGrid main = (CubeGrid)main_node.Tag;
+                    CubeBlock main_attachment_point = main.getBlock("LargeBlockArmorSlopeWhite");                    
+                    if (main_attachment_point != null)
+                    {
+                        
+                        //Console.WriteLine("Got module attachment");
+                        Vector3D diff = Sector.diff_orientation(main_attachment_point, module_attachment_point);
+                        //Console.WriteLine("Up :" + main_attachment_point.PositionAndOrientation.up.ToString() + " " + module_attachment_point.PositionAndOrientation.up.ToString());
+                        //Console.WriteLine("Forward :" + main_attachment_point.PositionAndOrientation.forward.ToString() + " " + module_attachment_point.PositionAndOrientation.forward.ToString());                        
+                        module.reOrient(module_attachment_point);
+                        //Console.WriteLine("module attachment point after reorient: "+module_attachment_point.PositionAndOrientation.position.ToString());
+                        main.reOrient(main_attachment_point);                        
+                        //lets try some rotation
+                        module.rotate_grid("X", coord.RadianToSteps(diff.X));
+                        module.rotate_grid("Y", coord.RadianToSteps(diff.Y));
+                        module.rotate_grid("Z", coord.RadianToSteps(diff.Z));
+                        Console.WriteLine("Difference " + coord.RadianToDegrees(diff.X) + " " + coord.RadianToDegrees(diff.Y) + " " + coord.RadianToDegrees(diff.Z));
+                        diff = Sector.diff_orientation(module_attachment_point, main_attachment_point);
+                        Console.WriteLine("After Rotation Difference: "+ coord.RadianToDegrees(diff.X) + " " + coord.RadianToDegrees(diff.Y) + " " + coord.RadianToDegrees(diff.Z));
+                        Console.WriteLine("Up :" + main_attachment_point.PositionAndOrientation.up.ToString() + " " + module_attachment_point.PositionAndOrientation.up.ToString());
+                        Console.WriteLine("Forward :" + main_attachment_point.PositionAndOrientation.forward.ToString() + " " + module_attachment_point.PositionAndOrientation.forward.ToString());
+                        return;
+                        main.merge(module);
+                        SectorTree.Nodes.Clear();
+                        SectorTree.Nodes.Add(sector.getTreeNode());
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine("Couldn't get module attachment");
+                }
+            }
+        }
+
+        private void xToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode node = SectorTree.SelectedNode;
+            CubeGrid cg = (CubeGrid)node.Tag;
+            cg.rotate_grid("X", 1);
+        }
+
+        private void yToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode node = SectorTree.SelectedNode;
+            CubeGrid cg = (CubeGrid)node.Tag;
+            cg.rotate_grid("Y", 1);
+        }
+
+        private void zToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode node = SectorTree.SelectedNode;
+            CubeGrid cg = (CubeGrid)node.Tag;
+            cg.rotate_grid("Z", 1);
         }
 
 
