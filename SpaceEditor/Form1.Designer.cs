@@ -49,12 +49,12 @@
             this.SectorTree = new System.Windows.Forms.TreeView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.worldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.QuickLoadMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importShipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.loggingCheck = new System.Windows.Forms.CheckBox();
-            this.QuickLoadMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.shipmenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -167,21 +167,21 @@
             // xToolStripMenuItem
             // 
             this.xToolStripMenuItem.Name = "xToolStripMenuItem";
-            this.xToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.xToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
             this.xToolStripMenuItem.Text = "X";
             this.xToolStripMenuItem.Click += new System.EventHandler(this.xToolStripMenuItem_Click);
             // 
             // yToolStripMenuItem
             // 
             this.yToolStripMenuItem.Name = "yToolStripMenuItem";
-            this.yToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.yToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
             this.yToolStripMenuItem.Text = "Y";
             this.yToolStripMenuItem.Click += new System.EventHandler(this.yToolStripMenuItem_Click);
             // 
             // zToolStripMenuItem
             // 
             this.zToolStripMenuItem.Name = "zToolStripMenuItem";
-            this.zToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.zToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
             this.zToolStripMenuItem.Text = "Z";
             this.zToolStripMenuItem.Click += new System.EventHandler(this.zToolStripMenuItem_Click);
             // 
@@ -215,6 +215,13 @@
             this.worldToolStripMenuItem.Name = "worldToolStripMenuItem";
             this.worldToolStripMenuItem.Size = new System.Drawing.Size(62, 24);
             this.worldToolStripMenuItem.Text = "World";
+            // 
+            // QuickLoadMenuItem1
+            // 
+            this.QuickLoadMenuItem1.Name = "QuickLoadMenuItem1";
+            this.QuickLoadMenuItem1.Size = new System.Drawing.Size(219, 24);
+            this.QuickLoadMenuItem1.Text = "Quick Load (caution!)";
+            this.QuickLoadMenuItem1.Click += new System.EventHandler(this.QuickLoadMenuItem1_Click);
             // 
             // loadToolStripMenuItem
             // 
@@ -256,13 +263,6 @@
             this.loggingCheck.Text = "Logging";
             this.loggingCheck.UseVisualStyleBackColor = true;
             this.loggingCheck.CheckedChanged += new System.EventHandler(this.loggingCheck_CheckedChanged);
-            // 
-            // QuickLoadMenuItem1
-            // 
-            this.QuickLoadMenuItem1.Name = "QuickLoadMenuItem1";
-            this.QuickLoadMenuItem1.Size = new System.Drawing.Size(175, 24);
-            this.QuickLoadMenuItem1.Text = "Quick Load";
-            this.QuickLoadMenuItem1.Click += new System.EventHandler(this.QuickLoadMenuItem1_Click);
             // 
             // Form1
             // 

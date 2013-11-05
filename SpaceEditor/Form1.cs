@@ -19,7 +19,7 @@ namespace SpaceEditor
     public partial class Form1 : Form
     {
         private Sector sector;
-        private string myVersion = "0.9.2";
+        private string myVersion = "0.9.3";
         private bool loggingEnabled = false;
         public string Log = "";
 
@@ -317,13 +317,23 @@ namespace SpaceEditor
 
         private void QuickLoadMenuItem1_Click(object sender, EventArgs e)
         {
+            bool quick = false;
+            DialogResult dialogResult = MessageBox.Show("Quick load is currently considered unstable, proceed with caution and always make a backup! \r\n\r\n  Hit 'Yes' to continue or 'No' to do a standard load.", "Quick load?", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                quick = true;
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                quick = false;
+            }
             DialogResult result = fileopen.ShowDialog();
             if (result == DialogResult.OK)
             {
                 string file = fileopen.FileName;
                 this.sector = new Sector();
                 SectorTree.Nodes.Clear();
-                Log = this.sector.loadFromXML(file, loggingEnabled,true);
+                Log = this.sector.loadFromXML(file, loggingEnabled,quick);
                 if (loggingEnabled)
                     File.WriteAllText("./Log.txt", Log);
                 Log = "";

@@ -190,7 +190,7 @@ namespace SpaceEditor
 
         public string getXML()
         {
-            if (dirty == false  || quick_loaded == true)
+            if (quick_loaded == true)
             {
                 string xml = "<MyObjectBuilder_EntityBase xsi:type='MyObjectBuilder_CubeGrid'>\r\n";
                 xml += base.getXML();
