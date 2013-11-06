@@ -19,7 +19,7 @@ namespace SpaceEditor
     public partial class Form1 : Form
     {
         private Sector sector;
-        private string myVersion = "0.9.3";
+        private string myVersion = "0.9.4";
         private bool loggingEnabled = false;
         public string Log = "";
 
@@ -240,7 +240,7 @@ namespace SpaceEditor
         
 
         private void importModuleToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        {            
             TreeNode node = SectorTree.SelectedNode;
             CubeGrid cg = (CubeGrid)node.Tag;
             DialogResult result = fileopen.ShowDialog();
@@ -249,33 +249,35 @@ namespace SpaceEditor
                 string filename = fileopen.FileName;
                 string xml = File.ReadAllText(filename);
                 CubeGrid module = sector.loadCGFragment(xml, false);
-                CubeBlock module_attachment_point = module.getBlock("LargeBlockArmorSlopeWhite");
+                CubeBlock module_attachment_point = module.getBlock("LargeBlockArmorCornerInvWhite");
                 if (module_attachment_point != null)
                 {
                     //Console.WriteLine("Got module attachment");
                     TreeNode main_node = SectorTree.SelectedNode;
                     CubeGrid main = (CubeGrid)main_node.Tag;
-                    CubeBlock main_attachment_point = main.getBlock("LargeBlockArmorSlopeWhite");                    
+                    CubeBlock main_attachment_point = main.getBlock("LargeBlockArmorCornerInvWhite");                    
                     if (main_attachment_point != null)
                     {
+
+                        Console.WriteLine("Before rotation!!");
+                        VRageMath.Vector3 diff = Sector.diff_orientation(main_attachment_point, module_attachment_point);
                         
                         //Console.WriteLine("Got module attachment");
-                        Vector3D diff = Sector.diff_orientation(main_attachment_point, module_attachment_point);
+                        
                         //Console.WriteLine("Up :" + main_attachment_point.PositionAndOrientation.up.ToString() + " " + module_attachment_point.PositionAndOrientation.up.ToString());
                         //Console.WriteLine("Forward :" + main_attachment_point.PositionAndOrientation.forward.ToString() + " " + module_attachment_point.PositionAndOrientation.forward.ToString());                        
                         module.reOrient(module_attachment_point);
                         //Console.WriteLine("module attachment point after reorient: "+module_attachment_point.PositionAndOrientation.position.ToString());
-                        main.reOrient(main_attachment_point);                        
+                        main.reOrient(main_attachment_point);                                                
                         //lets try some rotation
-                        module.rotate_grid("X", coord.RadianToSteps(diff.X));
-                        module.rotate_grid("Y", coord.RadianToSteps(diff.Y));
-                        module.rotate_grid("Z", coord.RadianToSteps(diff.Z));
-                        Console.WriteLine("Difference " + coord.RadianToDegrees(diff.X) + " " + coord.RadianToDegrees(diff.Y) + " " + coord.RadianToDegrees(diff.Z));
-                        diff = Sector.diff_orientation(module_attachment_point, main_attachment_point);
-                        Console.WriteLine("After Rotation Difference: "+ coord.RadianToDegrees(diff.X) + " " + coord.RadianToDegrees(diff.Y) + " " + coord.RadianToDegrees(diff.Z));
-                        Console.WriteLine("Up :" + main_attachment_point.PositionAndOrientation.up.ToString() + " " + module_attachment_point.PositionAndOrientation.up.ToString());
-                        Console.WriteLine("Forward :" + main_attachment_point.PositionAndOrientation.forward.ToString() + " " + module_attachment_point.PositionAndOrientation.forward.ToString());
-                        return;
+                        Console.WriteLine("Steps: " + vrageMath.AngleToSteps(diff.X) + " " + vrageMath.AngleToSteps(diff.Y) + " " + vrageMath.AngleToSteps(diff.Z));                        
+                        module.rotate_grid("X", vrageMath.AngleToSteps(diff.X));
+                        module.rotate_grid("Y", vrageMath.AngleToSteps(diff.Y));
+                        module.rotate_grid("Z", vrageMath.AngleToSteps(diff.Z));
+                        Console.WriteLine("After rotation!!");
+                       diff = Sector.diff_orientation(module_attachment_point, main_attachment_point);
+                       
+
                         main.merge(module);
                         SectorTree.Nodes.Clear();
                         SectorTree.Nodes.Add(sector.getTreeNode());
@@ -344,6 +346,41 @@ namespace SpaceEditor
             {
                 //logger.Items.Add("Unable to load file");
             }
+        }
+
+        private void testToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void testToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            List<int> rot_x = new List<int>();
+            List<int> rot_y = new List<int>();
+            List<int> rot_z = new List<int>();
+            rot_x.Add(0);
+            rot_x.Add(90);
+            rot_x.Add(180);
+            rot_x.Add(-90);
+            rot_y.AddRange(rot_x);
+            rot_z.AddRange(rot_x);
+
+            Quaternion test_rotation = MathStuff.quat_from_angles(90, 0, 0);
+            Console.WriteLine("here");
+            foreach (int x in rot_x)
+            {
+                foreach (int y in rot_y)
+                {
+                    foreach (int z in rot_z)
+                    {
+                        test_rotation = MathStuff.quat_from_angles(x, y, z);
+                        Console.WriteLine("case \"" + Math.Round(test_rotation.X, 1) + " " + Math.Round(test_rotation.Y, 1) + " " + Math.Round(test_rotation.Z, 1) + " " + Math.Round(test_rotation.W, 1) + "\":");
+                        Console.WriteLine("return new Vector3D("+x+","+y+","+z+");");
+                    }
+                }
+            }
+
+
         }
 
 

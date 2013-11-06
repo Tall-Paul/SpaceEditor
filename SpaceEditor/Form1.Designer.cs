@@ -83,7 +83,7 @@
             this.importModuleToolStripMenuItem,
             this.rotateToolStripMenuItem});
             this.shipmenu.Name = "treemenu";
-            this.shipmenu.Size = new System.Drawing.Size(179, 172);
+            this.shipmenu.Size = new System.Drawing.Size(179, 200);
             // 
             // exportShipMenuItem
             // 
@@ -119,21 +119,21 @@
             // xAxisToolStripMenuItem
             // 
             this.xAxisToolStripMenuItem.Name = "xAxisToolStripMenuItem";
-            this.xAxisToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
+            this.xAxisToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.xAxisToolStripMenuItem.Text = "X Axis";
             this.xAxisToolStripMenuItem.Click += new System.EventHandler(this.xAxisToolStripMenuItem_Click);
             // 
             // yAxisToolStripMenuItem
             // 
             this.yAxisToolStripMenuItem.Name = "yAxisToolStripMenuItem";
-            this.yAxisToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
+            this.yAxisToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.yAxisToolStripMenuItem.Text = "Y Axis";
             this.yAxisToolStripMenuItem.Click += new System.EventHandler(this.yAxisToolStripMenuItem_Click);
             // 
             // zAxisToolStripMenuItem
             // 
             this.zAxisToolStripMenuItem.Name = "zAxisToolStripMenuItem";
-            this.zAxisToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
+            this.zAxisToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.zAxisToolStripMenuItem.Text = "Z Axis";
             this.zAxisToolStripMenuItem.Click += new System.EventHandler(this.zAxisToolStripMenuItem_Click);
             // 
@@ -150,7 +150,6 @@
             this.importModuleToolStripMenuItem.Name = "importModuleToolStripMenuItem";
             this.importModuleToolStripMenuItem.Size = new System.Drawing.Size(178, 24);
             this.importModuleToolStripMenuItem.Text = "Import Module";
-            this.importModuleToolStripMenuItem.Visible = false;
             this.importModuleToolStripMenuItem.Click += new System.EventHandler(this.importModuleToolStripMenuItem_Click);
             // 
             // rotateToolStripMenuItem
@@ -167,21 +166,21 @@
             // xToolStripMenuItem
             // 
             this.xToolStripMenuItem.Name = "xToolStripMenuItem";
-            this.xToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
+            this.xToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.xToolStripMenuItem.Text = "X";
             this.xToolStripMenuItem.Click += new System.EventHandler(this.xToolStripMenuItem_Click);
             // 
             // yToolStripMenuItem
             // 
             this.yToolStripMenuItem.Name = "yToolStripMenuItem";
-            this.yToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
+            this.yToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.yToolStripMenuItem.Text = "Y";
             this.yToolStripMenuItem.Click += new System.EventHandler(this.yToolStripMenuItem_Click);
             // 
             // zToolStripMenuItem
             // 
             this.zToolStripMenuItem.Name = "zToolStripMenuItem";
-            this.zToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
+            this.zToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
             this.zToolStripMenuItem.Text = "Z";
             this.zToolStripMenuItem.Click += new System.EventHandler(this.zToolStripMenuItem_Click);
             // 
@@ -226,21 +225,21 @@
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(219, 24);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(219, 24);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // importShipToolStripMenuItem
             // 
             this.importShipToolStripMenuItem.Name = "importShipToolStripMenuItem";
-            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(219, 24);
             this.importShipToolStripMenuItem.Text = "Import Ship";
             this.importShipToolStripMenuItem.Click += new System.EventHandler(this.importShipToolStripMenuItem_Click);
             // 

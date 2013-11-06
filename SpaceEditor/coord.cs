@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Globalization;
 using System.Drawing.Drawing2D;
 using System.Drawing;
-using System.Windows.Media.Media3D;
+using VRageMath;
 
 namespace SpaceEditor
 {
@@ -182,117 +182,24 @@ namespace SpaceEditor
             return newClone;
         }
 
-        public void rotate_grid(string axis, int steps=1){           
+        public void rotate_grid(string axis, int steps=1){
+            if (steps == 0)
+                return;
             if (this.quat == true)
                 rotate_quat(axis, steps);
             else
                 rotate_coord(axis, steps);
         }
 
-        private double DegreesToRadians(double angle)
-        {
-            return angle * (Math.PI / 180);
-        }
+        
 
-        public static Vector3D quat_to_radians(Quaternion q)
-        {
-            // Store the Euler angles in radians
-            Vector3D pitchYawRoll = new Vector3D();
-
-            double sqw = q.W * q.W;
-            double sqx = q.X * q.X;
-            double sqy = q.Y * q.Y;
-            double sqz = q.Z * q.Z;
-
-            // If quaternion is normalised the unit is one, otherwise it is the correction factor
-            double unit = sqx + sqy + sqz + sqw;
-            double test = q.X * q.Y + q.Z * q.W;
-
-            if (test > 0.4999f * unit)                              // 0.4999f OR 0.5f - EPSILON
-            {
-                // Singularity at north pole
-                pitchYawRoll.Y = 2f * (float)Math.Atan2(q.X, q.W);  // Yaw
-                pitchYawRoll.X = Math.PI * 0.5f;                         // Pitch
-                pitchYawRoll.Z = 0f;                                // Roll
-                return pitchYawRoll;
-            }
-            else if (test < -0.4999f * unit)                        // -0.4999f OR -0.5f + EPSILON
-            {
-                // Singularity at south pole
-                pitchYawRoll.Y = -2f * (float)Math.Atan2(q.X, q.W); // Yaw
-                pitchYawRoll.X = -Math.PI * 0.5f;                        // Pitch
-                pitchYawRoll.Z = 0f;                                // Roll
-                return pitchYawRoll;
-            }
-            else
-            {
-                pitchYawRoll.Y = (float)Math.Atan2(2f * q.Y * q.W - 2f * q.X * q.Z, sqx - sqy - sqz + sqw);       // Yaw
-                pitchYawRoll.X = (float)Math.Asin(2f * test / unit);                                             // Pitch
-                pitchYawRoll.Z = (float)Math.Atan2(2f * q.X * q.W - 2f * q.Y * q.Z, -sqx + sqy - sqz + sqw);      // Roll
-            }
-
-            return pitchYawRoll;
-        }
-
-        public static double RadianToDegrees(double angle)
-        {
-            return angle * (180.0 / Math.PI);
-        }
-
-        public static int RadianToSteps(double angle)
-        {
-            double actual_angle = angle * (180.0 / Math.PI); //converts to degrees
-            //Console.WriteLine("Angle: " + actual_angle);
-            //normalise
-            //this was written on 1 hours sleep.  May be rubbish.
-            if (actual_angle >= -271 && actual_angle < -181)
-                return 1;
-            if (actual_angle >= -181 && actual_angle < -91)
-                return 2;
-            if (actual_angle >= -91 && actual_angle < 0)
-                return 3;
-            if (actual_angle >= 0 && actual_angle < 90)
-                return 0;
-            if (actual_angle >= 90 && actual_angle < 180)
-                return 1;
-            if (actual_angle >= 180 && actual_angle < 270)
-                return 2;
-            if (actual_angle >= 270 && actual_angle < 360)
-                return 3;
-            return 0;
-
-        }
-
-        public void rotate_quat(string axis,int steps=1){                        
-            Quaternion quat = new Quaternion(X,Y,Z,W);
-            Console.WriteLine("Old Y: " + coord.RadianToDegrees(coord.quat_to_radians(quat).Y));
-            Console.WriteLine("Old X: " + coord.RadianToDegrees(coord.quat_to_radians(quat).X));
-            Console.WriteLine("Old Z: " + coord.RadianToDegrees(coord.quat_to_radians(quat).Z));            
-            Vector3D rotate_axis = new Vector3D(0,0,0);
-            switch (axis){
-                case ("X"):
-                    rotate_axis = new Vector3D(0,0,1);
-                break;
-                case ("Y"):
-                    rotate_axis = new Vector3D(0, 1, 0);
-                break;
-                case ("Z"):
-                    rotate_axis = new Vector3D(1, 0, 0);
-                break;                
-            }
-            Quaternion rotation = new Quaternion(rotate_axis, steps * 90);
-            Console.WriteLine("Rotation Y: " + coord.RadianToDegrees(coord.quat_to_radians(rotation).Y));
-            Console.WriteLine("Rotation X: " + coord.RadianToDegrees(coord.quat_to_radians(rotation).X));
-            Console.WriteLine("Rotation Z: " + coord.RadianToDegrees(coord.quat_to_radians(rotation).Z));
-            quat = rotation * quat;
-            Console.WriteLine("result Y: " + coord.RadianToDegrees(coord.quat_to_radians(quat).Y));
-            Console.WriteLine("result X: " + coord.RadianToDegrees(coord.quat_to_radians(quat).X));
-            Console.WriteLine("result Z: " + coord.RadianToDegrees(coord.quat_to_radians(quat).Z));
+        public void rotate_quat(string axis,int steps=1){           
+            Quaternion myQuat = new Quaternion((float)X, (float)Y, (float)Z, (float)W);
+            Quaternion quat = vrageMath.rotateQuat(myQuat, axis, steps * 90);
             X = quat.X;
             Y = quat.Y;
             Z = quat.Z;
-            W = quat.W;
-            Console.WriteLine("New Quat: " + this.ToString());
+            W = quat.W;                        
         }
 
         public void rotate_coord(string axis,int steps=1){

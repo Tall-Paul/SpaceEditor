@@ -43,9 +43,14 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="VRage.Math">
+      <HintPath>D:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\VRage.Math.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Character.cs" />
+    <Compile Include="vrageMath.cs" />
+    <Compile Include="MathStuff.cs" />
     <Compile Include="Sector.cs" />
     <Compile Include="entity_misc.cs" />
     <Compile Include="VoxelMap.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Windows.Forms;
 using System.IO;
-using System.Windows.Media.Media3D;
+using VRageMath;
 
 namespace SpaceEditor
 {
@@ -27,15 +27,24 @@ namespace SpaceEditor
 
         public bool quick_loaded = false;
 
-       
+        
 
-        public static Vector3D diff_orientation(CubeBlock block1, CubeBlock block2)
+        public static Vector3 diff_orientation(CubeBlock block1, CubeBlock block2)
         {
-            Quaternion orientation_1 = new Quaternion(block1.Orientation.X, block1.Orientation.Y, block1.Orientation.Z, block1.Orientation.W);
-            Quaternion orientation_2 = new Quaternion(block2.Orientation.X, block2.Orientation.Y, block2.Orientation.Z, block2.Orientation.W);
-            orientation_2.Invert();
-            Quaternion q = orientation_1 * orientation_2;
-            return coord.quat_to_radians(q);            
+            Quaternion orientation_1 = new Quaternion((float)block1.Orientation.X, (float)block1.Orientation.Y, (float)block1.Orientation.Z, (float)block1.Orientation.W);
+            Quaternion orientation_2 = new Quaternion((float)block2.Orientation.X, (float)block2.Orientation.Y, (float)block2.Orientation.Z, (float)block2.Orientation.W);
+            Console.WriteLine("############## diff_orientation ########################");
+            Console.Write("block 1 orientation = " );
+            Vector3 vec1 = vrageMath.quat_to_angles(orientation_1);
+            Console.WriteLine(MathHelper.ToDegrees(vec1.X) + " " + MathHelper.ToDegrees(vec1.Y) + " " + MathHelper.ToDegrees(vec1.Z));
+            Console.Write("block 2 orientation = ");
+            vec1 = vrageMath.quat_to_angles(orientation_2);
+            Console.WriteLine(MathHelper.ToDegrees(vec1.X) + " " + MathHelper.ToDegrees(vec1.Y) + " " + MathHelper.ToDegrees(vec1.Z));                        
+            Console.Write("difference = ");
+            Vector3 diff = vrageMath.diff_quats(orientation_1, orientation_2);
+            Console.WriteLine(MathHelper.ToDegrees(diff.X) + " " + MathHelper.ToDegrees(diff.Y) + " " + MathHelper.ToDegrees(diff.Z));
+            Console.WriteLine("############## /diff_orientation ########################");
+            return diff;
         }
 
         public CubeGrid loadCGFragment(string xml,bool displace = false)
