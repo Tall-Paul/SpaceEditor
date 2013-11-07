@@ -47,17 +47,20 @@
             this.yToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SectorTree = new System.Windows.Forms.TreeView();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.worldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.QuickLoadMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importShipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.loggingCheck = new System.Windows.Forms.CheckBox();
+            this.savegamesbox = new System.Windows.Forms.ComboBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
+            this.shipcontainerMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.importShipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cleanupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shipmenu.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.shipcontainerMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // fileopen
@@ -83,7 +86,7 @@
             this.importModuleToolStripMenuItem,
             this.rotateToolStripMenuItem});
             this.shipmenu.Name = "treemenu";
-            this.shipmenu.Size = new System.Drawing.Size(179, 200);
+            this.shipmenu.Size = new System.Drawing.Size(179, 172);
             // 
             // exportShipMenuItem
             // 
@@ -119,21 +122,21 @@
             // xAxisToolStripMenuItem
             // 
             this.xAxisToolStripMenuItem.Name = "xAxisToolStripMenuItem";
-            this.xAxisToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.xAxisToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
             this.xAxisToolStripMenuItem.Text = "X Axis";
             this.xAxisToolStripMenuItem.Click += new System.EventHandler(this.xAxisToolStripMenuItem_Click);
             // 
             // yAxisToolStripMenuItem
             // 
             this.yAxisToolStripMenuItem.Name = "yAxisToolStripMenuItem";
-            this.yAxisToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.yAxisToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
             this.yAxisToolStripMenuItem.Text = "Y Axis";
             this.yAxisToolStripMenuItem.Click += new System.EventHandler(this.yAxisToolStripMenuItem_Click);
             // 
             // zAxisToolStripMenuItem
             // 
             this.zAxisToolStripMenuItem.Name = "zAxisToolStripMenuItem";
-            this.zAxisToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.zAxisToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
             this.zAxisToolStripMenuItem.Text = "Z Axis";
             this.zAxisToolStripMenuItem.Click += new System.EventHandler(this.zAxisToolStripMenuItem_Click);
             // 
@@ -161,87 +164,37 @@
             this.rotateToolStripMenuItem.Name = "rotateToolStripMenuItem";
             this.rotateToolStripMenuItem.Size = new System.Drawing.Size(178, 24);
             this.rotateToolStripMenuItem.Text = "Rotate";
-            this.rotateToolStripMenuItem.Visible = false;
             // 
             // xToolStripMenuItem
             // 
             this.xToolStripMenuItem.Name = "xToolStripMenuItem";
-            this.xToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.xToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
             this.xToolStripMenuItem.Text = "X";
             this.xToolStripMenuItem.Click += new System.EventHandler(this.xToolStripMenuItem_Click);
             // 
             // yToolStripMenuItem
             // 
             this.yToolStripMenuItem.Name = "yToolStripMenuItem";
-            this.yToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.yToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
             this.yToolStripMenuItem.Text = "Y";
             this.yToolStripMenuItem.Click += new System.EventHandler(this.yToolStripMenuItem_Click);
             // 
             // zToolStripMenuItem
             // 
             this.zToolStripMenuItem.Name = "zToolStripMenuItem";
-            this.zToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.zToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
             this.zToolStripMenuItem.Text = "Z";
             this.zToolStripMenuItem.Click += new System.EventHandler(this.zToolStripMenuItem_Click);
             // 
             // SectorTree
             // 
             this.SectorTree.LabelEdit = true;
-            this.SectorTree.Location = new System.Drawing.Point(6, 34);
+            this.SectorTree.Location = new System.Drawing.Point(12, 40);
             this.SectorTree.Name = "SectorTree";
-            this.SectorTree.Size = new System.Drawing.Size(629, 395);
+            this.SectorTree.Size = new System.Drawing.Size(423, 370);
             this.SectorTree.TabIndex = 12;
             this.SectorTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.SectorTree_AfterLabelEdit);
             this.SectorTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.SectorTree_AfterSelect);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.worldToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(640, 28);
-            this.menuStrip1.TabIndex = 13;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // worldToolStripMenuItem
-            // 
-            this.worldToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.QuickLoadMenuItem1,
-            this.loadToolStripMenuItem,
-            this.saveToolStripMenuItem,
-            this.importShipToolStripMenuItem});
-            this.worldToolStripMenuItem.Name = "worldToolStripMenuItem";
-            this.worldToolStripMenuItem.Size = new System.Drawing.Size(62, 24);
-            this.worldToolStripMenuItem.Text = "World";
-            // 
-            // QuickLoadMenuItem1
-            // 
-            this.QuickLoadMenuItem1.Name = "QuickLoadMenuItem1";
-            this.QuickLoadMenuItem1.Size = new System.Drawing.Size(219, 24);
-            this.QuickLoadMenuItem1.Text = "Quick Load (caution!)";
-            this.QuickLoadMenuItem1.Click += new System.EventHandler(this.QuickLoadMenuItem1_Click);
-            // 
-            // loadToolStripMenuItem
-            // 
-            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(219, 24);
-            this.loadToolStripMenuItem.Text = "Load";
-            this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
-            // 
-            // saveToolStripMenuItem
-            // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(219, 24);
-            this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
-            // 
-            // importShipToolStripMenuItem
-            // 
-            this.importShipToolStripMenuItem.Name = "importShipToolStripMenuItem";
-            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(219, 24);
-            this.importShipToolStripMenuItem.Text = "Import Ship";
-            this.importShipToolStripMenuItem.Click += new System.EventHandler(this.importShipToolStripMenuItem_Click);
             // 
             // pictureBox1
             // 
@@ -263,24 +216,106 @@
             this.loggingCheck.UseVisualStyleBackColor = true;
             this.loggingCheck.CheckedChanged += new System.EventHandler(this.loggingCheck_CheckedChanged);
             // 
+            // savegamesbox
+            // 
+            this.savegamesbox.FormattingEnabled = true;
+            this.savegamesbox.Location = new System.Drawing.Point(12, 9);
+            this.savegamesbox.Name = "savegamesbox";
+            this.savegamesbox.Size = new System.Drawing.Size(163, 24);
+            this.savegamesbox.TabIndex = 16;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(270, 8);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(52, 25);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "Load";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(328, 8);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(49, 25);
+            this.button2.TabIndex = 18;
+            this.button2.Text = "Save";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(383, 8);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(52, 25);
+            this.button3.TabIndex = 19;
+            this.button3.Text = "Copy";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 413);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(0, 17);
+            this.label1.TabIndex = 20;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(181, 8);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(65, 25);
+            this.button4.TabIndex = 21;
+            this.button4.Text = "Q Load";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // shipcontainerMenu
+            // 
+            this.shipcontainerMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.importShipToolStripMenuItem,
+            this.cleanupToolStripMenuItem});
+            this.shipcontainerMenu.Name = "shipcontainerMenu";
+            this.shipcontainerMenu.Size = new System.Drawing.Size(176, 80);            
+            // 
+            // importShipToolStripMenuItem
+            // 
+            this.importShipToolStripMenuItem.Name = "importShipToolStripMenuItem";
+            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.importShipToolStripMenuItem.Text = "Import Ship";
+            this.importShipToolStripMenuItem.Click += new System.EventHandler(this.importShipToolStripMenuItem_Click_1);
+            // 
+            // cleanupToolStripMenuItem
+            // 
+            this.cleanupToolStripMenuItem.Name = "cleanupToolStripMenuItem";
+            this.cleanupToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.cleanupToolStripMenuItem.Text = "Cleanup";
+            this.cleanupToolStripMenuItem.Click += new System.EventHandler(this.cleanupToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 436);
+            this.ClientSize = new System.Drawing.Size(447, 436);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.savegamesbox);
             this.Controls.Add(this.loggingCheck);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.SectorTree);
-            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "SpaceEditor v0.8.2 (tall-paul.co.uk)";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.shipmenu.ResumeLayout(false);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.shipcontainerMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -296,11 +331,6 @@
         private System.Windows.Forms.ToolStripMenuItem exportShipMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cloneShipMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteShipMenuItem;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem worldToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importShipToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mirrorBlocksToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem xAxisToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem yAxisToolStripMenuItem;
@@ -313,7 +343,15 @@
         private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem yToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem zToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem QuickLoadMenuItem1;
+        private System.Windows.Forms.ComboBox savegamesbox;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.ContextMenuStrip shipcontainerMenu;
+        private System.Windows.Forms.ToolStripMenuItem importShipToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cleanupToolStripMenuItem;
     }
 }
 

@@ -13,15 +13,22 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Windows.Media.Media3D;
+using Microsoft.Win32;
+using System.Security.Permissions;
+
+[assembly: RegistryPermissionAttribute(SecurityAction.RequestMinimum,
+    ViewAndModify = "HKEY_CURRENT_USER")]
 
 namespace SpaceEditor
 {
     public partial class Form1 : Form
     {
         private Sector sector;
-        private string myVersion = "0.9.4";
+        private string myVersion = "0.9.5";
         private bool loggingEnabled = false;
         public string Log = "";
+        public string steam_install_path = "";
+        public string saves_path = "";
 
         public Form1()
         {
@@ -99,12 +106,22 @@ namespace SpaceEditor
                         SectorTree.LabelEdit = true;
                         SectorTree.SelectedNode.BeginEdit();
                     }
-                    catch (FormatException) { }
+                    catch (FormatException) {
+                        
+                    }
                 }
             }
             else
-            {              
-                SectorTree.SelectedNode.ContextMenuStrip = null;
+            {
+                try
+                {
+                    Console.WriteLine(SectorTree.SelectedNode.Text);
+                    if (SectorTree.SelectedNode.Text == "Ships / stations")
+                    {
+                        SectorTree.SelectedNode.ContextMenuStrip = this.shipcontainerMenu;
+                    }
+                }
+                catch { }
                
             }
         }
@@ -162,16 +179,7 @@ namespace SpaceEditor
 
         private void importShipToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = fileopen.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                string filename = fileopen.FileName;
-                string xml = File.ReadAllText(filename);
-                CubeGrid new_cg = sector.loadCGFragment(xml,false);
-                sector.CubeGrids.Add(new_cg);
-                SectorTree.Nodes.Clear();
-                SectorTree.Nodes.Add(sector.getTreeNode());
-            }
+            
         }
 
         private void SectorTree_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
@@ -381,6 +389,222 @@ namespace SpaceEditor
             }
 
 
+        }
+
+        private void load_saves() {
+            //load saves
+            savegamesbox.Items.Clear();
+            var paths = Directory.GetDirectories(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SpaceEngineers", "Saves"));
+            if (paths != null && paths.Length > 0)
+            {
+                this.saves_path = paths[0];
+                var saves = Directory.GetDirectories(saves_path);
+                foreach (String savegame in saves)
+                {
+                    savegamesbox.Items.Add(savegame.Split(Path.DirectorySeparatorChar).Last());
+                }
+                savegamesbox.SelectedIndex = 0;
+            }
+            else
+            {
+                MessageBox.Show("Can't find save games!!");
+            }
+        }
+
+        
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //find steam installation directory
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
+            if (key != null){
+                String installdir = key.GetValue("SteamPath").ToString();
+                installdir += @"\steamapps\common\SpaceEngineers";
+                this.steam_install_path = installdir;
+                String current_path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                if (!File.Exists(Path.Combine(current_path, "VRage.Math.dll")))
+                {
+                    if (File.Exists(Path.Combine(this.steam_install_path, "VRage.Math.dll")))
+                        File.Copy(Path.Combine(this.steam_install_path, "VRage.Math.dll"), Path.Combine(current_path, "VRage.Math.dll"));
+                    else
+                        MessageBox.Show("Unable to locate VRage Math Library!!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Unable to locate Steam!!");
+            }
+            this.load_saves();
+
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string file = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.sbs");
+            if (File.Exists(file))
+            {
+                this.sector = new Sector();
+                SectorTree.Nodes.Clear();
+                label1.Text = "Loading...";
+                Log = this.sector.loadFromXML(file, loggingEnabled);
+                if (loggingEnabled)
+                    File.WriteAllText("./Log.txt", Log);
+                Log = "";
+                TreeNode node = sector.getTreeNode();
+                node.Text = savegamesbox.SelectedItem.ToString();
+                SectorTree.Nodes.Add(node);
+                mirrorBlocksToolStripMenuItem.Visible = true;
+                label1.Text = "";
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Overwrite \"" + savegamesbox.SelectedItem.ToString()+"\"?", "Save", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+
+                string file = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.sbs");
+                string backupfile = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.BAK");
+                File.Copy(file, backupfile, true);
+                label1.Text = "Saving...";
+                File.WriteAllText(file, this.sector.getXML());
+                label1.Text = "";
+            }
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            bool quick = false;
+            DialogResult dialogResult = MessageBox.Show("Quick load is currently considered unstable, proceed with caution and always make a backup! \r\n\r\n  Hit 'Yes' to continue or 'No' to do a standard load.", "Quick load?", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                quick = true;
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                quick = false;
+            }            
+            string file = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.sbs");
+            if (File.Exists(file))
+            {
+                this.sector = new Sector();
+                SectorTree.Nodes.Clear();
+                Log = this.sector.loadFromXML(file, loggingEnabled, quick);
+                if (loggingEnabled)
+                    File.WriteAllText("./Log.txt", Log);
+                Log = "";
+                SectorTree.Nodes.Add(sector.getTreeNode());
+                mirrorBlocksToolStripMenuItem.Visible = false;
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            String savegame = "";
+            DialogResult result = Form1.InputBox("Copy SaveGame","Enter the name of the new savegame",ref savegame);
+            if (result == DialogResult.OK && savegame != "")
+            {
+                String oldpath = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString());
+                String newpath = Path.Combine(this.saves_path,savegame);
+                if (!Directory.Exists(newpath))
+                {
+                    Directory.CreateDirectory(newpath);
+                }
+                foreach (String file in Directory.GetFiles(oldpath))
+                {
+                    String filename = file.Split(Path.DirectorySeparatorChar).Last();
+                    String new_file = Path.Combine(newpath, filename);
+                    File.Copy(file, new_file, true);                    
+                }
+                this.load_saves();
+            }
+            
+
+        }
+
+        public static DialogResult InputBox(string title, string promptText, ref string value)
+        {
+            Form form = new Form();
+            Label label = new Label();
+            TextBox textBox = new TextBox();
+            Button buttonOk = new Button();
+            Button buttonCancel = new Button();
+
+            form.Text = title;
+            label.Text = promptText;
+            textBox.Text = value;
+
+            buttonOk.Text = "OK";
+            buttonCancel.Text = "Cancel";
+            buttonOk.DialogResult = DialogResult.OK;
+            buttonCancel.DialogResult = DialogResult.Cancel;
+
+            label.SetBounds(9, 20, 372, 13);
+            textBox.SetBounds(12, 40, 372, 20);
+            buttonOk.SetBounds(228, 72, 75, 23);
+            buttonCancel.SetBounds(309, 72, 75, 23);
+
+            label.AutoSize = true;
+            textBox.Anchor = textBox.Anchor | AnchorStyles.Right;
+            buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+
+            form.ClientSize = new Size(396, 107);
+            form.Controls.AddRange(new Control[] { label, textBox, buttonOk, buttonCancel });
+            form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+            form.FormBorderStyle = FormBorderStyle.FixedDialog;
+            form.StartPosition = FormStartPosition.CenterScreen;
+            form.MinimizeBox = false;
+            form.MaximizeBox = false;
+            form.AcceptButton = buttonOk;
+            form.CancelButton = buttonCancel;
+
+            DialogResult dialogResult = form.ShowDialog();
+            value = textBox.Text;
+            return dialogResult;
+        }
+
+        private void importShipToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            DialogResult result = fileopen.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string filename = fileopen.FileName;
+                string xml = File.ReadAllText(filename);
+                CubeGrid new_cg = sector.loadCGFragment(xml, false);
+                sector.CubeGrids.Add(new_cg);
+                SectorTree.Nodes.Clear();
+                SectorTree.Nodes.Add(sector.getTreeNode());
+            }
+        }
+
+
+        private void cleanupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            String threshold = "";
+            DialogResult result = Form1.InputBox("Cleanup","Delete any entities with less than this number of blocks",ref threshold);
+            if (result == DialogResult.OK && threshold != "")
+            {
+                List<CubeGrid> deletions = new List<CubeGrid>();
+                int thresher = int.Parse(threshold);
+                foreach (CubeGrid cg in sector.CubeGrids)
+                {
+                    Console.WriteLine(cg.getBlockcount());
+                    if (cg.getBlockcount() < thresher)
+                    {
+                        deletions.Add(cg);
+                    }
+                }
+                foreach (CubeGrid cg in deletions)
+                {
+                    sector.CubeGrids.Remove(cg);
+                }
+                SectorTree.Nodes.Clear();
+                SectorTree.Nodes.Add(sector.getTreeNode());
+            }
         }
 
 

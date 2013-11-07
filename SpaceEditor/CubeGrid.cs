@@ -83,6 +83,15 @@ namespace SpaceEditor
             //Console.WriteLine("Loaded "+displayType+" with "+CubeBlocks.Count +" blocks");
         }
 
+        public int getBlockcount()
+        {
+            if (quick_loaded == true)
+                return this.quick_count;
+            else
+                return CubeBlocks.Count();
+
+        }
+
         /*
          * not working yet
          * 
