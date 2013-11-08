@@ -51,9 +51,10 @@ namespace SpaceEditor
                         this.cockpit = new_block;
                         if (new_block.hasPilot == true)
                         {
+                            Console.WriteLine("Grid has pilot");
                             this.hasPilot = true;
                             new_block.Pilot.parent = this.EntityId;
-                            Pilot = new_block.Pilot;
+                            this.Pilot = new_block.Pilot;
                         }
                     }
                     CubeBlocks.Add(new_block);

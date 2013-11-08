@@ -31,7 +31,8 @@ namespace SpaceEditor
             XmlNode myPilot = node.SelectSingleNode("Pilot");
             if (myPilot != null)
             {
-                hasPilot = true;
+                this.hasPilot = true;
+                Console.WriteLine("Got pilot");
                 Pilot = new Character(this.parent_sector);
                 Pilot.loadFromXML(myPilot,this.EntityId);
             }

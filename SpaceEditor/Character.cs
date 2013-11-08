@@ -23,16 +23,15 @@ namespace SpaceEditor
 
         public Character(Sector parent) : base(parent) { }
 
-        public void loadFromXML(XmlNode node, string parent)
+        public void loadFromXML(XmlNode node, string parent_string)
         {
            
             base.loadFromXML(node);
             Console.WriteLine("loading character");
-            this.parent = parent;
-            Console.WriteLine("set parent");
+            Console.WriteLine(parent_string);
+            this.parent = parent_string;            
             this.displayType = "Character";
-            this.actualType = "Character";
-            Console.WriteLine("set types");
+            this.actualType = "Character";           
             CharacterModel = node.SelectSingleNode("CharacterModel").InnerText;
             Console.WriteLine("got model");
             Inventory = node.SelectSingleNode("Inventory").InnerXml;
@@ -41,12 +40,16 @@ namespace SpaceEditor
             Console.WriteLine("got battery");
             LightEnabled = node.SelectSingleNode("LightEnabled").InnerText;
             Console.WriteLine("got light");
-            JetpackMode = node.SelectSingleNode("JetpackMode").InnerText;
-            Console.WriteLine("got jetpackmode");
-            //UsingLadder = node.SelectSingleNode("UsingLadder").Attributes.GetNamedItem("xsi:nil").Value;
-            HeadAngle.loadFromXML(node.SelectSingleNode("HeadAngle"));
-            LinearVelocity.loadFromXML(node.SelectSingleNode("LinearVelocity"));
-            AutoenableJetPackDelay = node.SelectSingleNode("AutoenableJetpackDelay").InnerText;            
+            JetpackMode = node.SelectSingleNode("JetpackMode").InnerText;            
+            XmlNode trynode = node.SelectSingleNode("HeadAngle");
+            if (trynode != null)
+                HeadAngle.loadFromXML(trynode);
+            trynode = node.SelectSingleNode("LinearVelocity");
+            if (trynode != null)
+                LinearVelocity.loadFromXML(trynode);
+            trynode = node.SelectSingleNode("AutoenableJetpackDelay");
+            if (trynode != null)
+                AutoenableJetPackDelay = trynode.InnerText;            
             Console.WriteLine("Character Loaded");
         }
 

@@ -24,7 +24,7 @@ namespace SpaceEditor
     public partial class Form1 : Form
     {
         private Sector sector;
-        private string myVersion = "0.9.6";
+        private string myVersion = "0.9.61";
         private bool loggingEnabled = false;
         public string Log = "";
         public string steam_install_path = "";

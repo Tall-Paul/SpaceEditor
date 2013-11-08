@@ -114,6 +114,7 @@ namespace SpaceEditor
                                     if (cg.hasPilot == true)
                                     {
                                         this.character = cg.Pilot;
+                                        Console.WriteLine("Sector found pilot");
                                         log += "found Pilot\r\n";
                                     }
                                     this.CubeGrids.Add(cg);
@@ -151,7 +152,7 @@ namespace SpaceEditor
                     log += "StackTrace " + err.StackTrace+"\r\n";
                 }
 
-             if (character.parent == "")
+             if (character == null || character.parent == "")
              {
                  this.CubeGrids.Clear();
                  this.VoxelMaps.Clear();
@@ -167,7 +168,7 @@ namespace SpaceEditor
         public TreeNode getTreeNode(){
             TreeNode SectorNode = new TreeNode("Sector " + this.Position.X.ToString() + "," + this.Position.Y.ToString() + "," + this.Position.Z.ToString());
             Console.WriteLine("Reloading CubeGrid nodes");
-            if (character.parent != "")
+            if (character != null && character.parent != "")
                 SectorNode.Nodes.Add(character.getTreeNode());
             if (CubeGrids.Count > 0)
             {
