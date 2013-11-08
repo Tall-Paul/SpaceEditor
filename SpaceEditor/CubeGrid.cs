@@ -25,7 +25,12 @@ namespace SpaceEditor
         public string raw = "";
         public bool dirty = false;
         public bool quick_loaded = false;
-        public int quick_count = 0;
+        public int quick_count = 0;        
+
+        public CubeGrid(Sector parent) : base(parent)
+        {
+            
+        }
         
 
         public void loadFromXML(XmlNode node, bool quick = false)
@@ -39,7 +44,7 @@ namespace SpaceEditor
                 Console.WriteLine("Loading blocks...");
                 foreach (XmlNode block in blocks)
                 {
-                    CubeBlock new_block = new CubeBlock();
+                    CubeBlock new_block = new CubeBlock(this.parent_sector);
                     new_block.loadFromXML(block);
                     if (new_block.SubTypeName == "LargeBlockCockpit" || new_block.SubTypeName == "SmallBlockCockpit")
                     {
@@ -260,7 +265,7 @@ namespace SpaceEditor
             XmlReader rd = XmlReader.Create(new StringReader(xml), xset, context);
             XmlDocument NewDoc = new XmlDocument();
             NewDoc.Load(rd);
-            CubeBlock cb = new CubeBlock();
+            CubeBlock cb = new CubeBlock(this.parent_sector);
             cb.loadFromXML(NewDoc.SelectSingleNode("MyObjectBuilder_CubeBlock"));
             cb.new_id();
             return cb;
@@ -315,10 +320,12 @@ namespace SpaceEditor
             this.dirty = true;
             foreach (CubeBlock cb in CubeBlocks)
             {
+                this.parent_sector.main_form.update_status("Reorientating: " + cb.EntityId);
                 cb.PositionAndOrientation.position.offset(offset_pando.position);
                 cb.Min.offset(offset_min);
                 cb.Max.offset(offset_max);
             }
+            this.parent_sector.main_form.update_status("");
         }
 
         public void reOrient(CubeBlock new_anchor)
@@ -345,12 +352,13 @@ namespace SpaceEditor
                 return;
             foreach (CubeBlock cb in CubeBlocks)
             {
-                Console.WriteLine("Rotating " + cb.SubTypeName);
+                this.parent_sector.main_form.update_status("Rotating: " + cb.EntityId);
                 cb.PositionAndOrientation.rotate_grid(axis, steps);
                 cb.Min.rotate_grid(axis, steps);
                 cb.Max.rotate_grid(axis, steps);
                 cb.Orientation.rotate_grid(axis, steps);
             }
+            this.parent_sector.main_form.update_status("");
         }
 
     }

@@ -23,11 +23,15 @@ namespace SpaceEditor
         private TreeNode cg_nodes = new TreeNode("Ships / stations");
         private TreeNode misc_nodes = new TreeNode("Other");
 
-        public Character character = new Character();
+        public Character character = null;
+        public Form1 main_form = null;
 
         public bool quick_loaded = false;
 
-        
+        public Sector(Form1 main_form)
+        {
+            this.main_form = main_form;
+        }
 
         public static Vector3 diff_orientation(CubeBlock block1, CubeBlock block2)
         {
@@ -59,7 +63,7 @@ namespace SpaceEditor
             XmlReader rd = XmlReader.Create(new StringReader(xml), xset, context);
             XmlDocument NewDoc = new XmlDocument();
             NewDoc.Load(rd);            
-            CubeGrid new_cg = new CubeGrid();
+            CubeGrid new_cg = new CubeGrid(this);
             new_cg.loadFromXML(NewDoc.SelectSingleNode("MyObjectBuilder_EntityBase"),this.quick_loaded);
             new_cg.new_id();
             if (displace == true)
@@ -72,7 +76,7 @@ namespace SpaceEditor
         public String loadFromXML(string filename,bool loggingEnabled = false, bool quick_load = false){
             String log = "";
             this.quick_loaded = quick_load;
-
+            this.main_form.update_status("Loading");
             log += "Loading Sector from " + filename + "\r\n";
              doc.Load(filename); 
              try
@@ -87,7 +91,7 @@ namespace SpaceEditor
                         switch (entity_type)
                         {
                             case "MyObjectBuilder_VoxelMap":                                
-                                VoxelMap vm = new VoxelMap();
+                                VoxelMap vm = new VoxelMap(this);
                                 log += "Loading VoxelMap\r\n";
                                 try
                                 {
@@ -101,7 +105,7 @@ namespace SpaceEditor
                                 }                        
                                 break;
                             case "MyObjectBuilder_CubeGrid":
-                                CubeGrid cg = new CubeGrid();
+                                CubeGrid cg = new CubeGrid(this);
                                 log += "Loading CubeGrid\r\n";
                                 try
                                 {
@@ -123,6 +127,7 @@ namespace SpaceEditor
                                 log += "Loading Character\r\n";
                                 try
                                 {
+                                    this.character = new Character(this);
                                     character.loadFromXML(entity, "sector");
                                     log += "Character Loaded\r\n";
                                 }
@@ -132,7 +137,7 @@ namespace SpaceEditor
                                 }
                                 break;
                             default:
-                                entity_misc em = new entity_misc();
+                                entity_misc em = new entity_misc(this);
                                 em.loadFromXML(entity);
                                 this.EntityMiscs.Add(em);
                                 break;
@@ -154,6 +159,7 @@ namespace SpaceEditor
                  log += "No Character / Pilot found!!\r\n";
                  MessageBox.Show("Unable to load world, Are you currently piloting a ship?");                 
              }
+             this.main_form.update_status("");
              return log;
 
         }
@@ -207,6 +213,7 @@ namespace SpaceEditor
                 xml += character.getXML();
             xml += "</SectorObjects>\r\n";
             xml += "</MyObjectBuilder_Sector>";
+            this.main_form.update_status("");
             return xml;
         }
     }

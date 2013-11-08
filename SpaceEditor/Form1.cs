@@ -24,7 +24,7 @@ namespace SpaceEditor
     public partial class Form1 : Form
     {
         private Sector sector;
-        private string myVersion = "0.9.5";
+        private string myVersion = "0.9.6";
         private bool loggingEnabled = false;
         public string Log = "";
         public string steam_install_path = "";
@@ -66,16 +66,14 @@ namespace SpaceEditor
         }
 
 
-        private void saveFileDialog2_FileOk(object sender, CancelEventArgs e)
+
+
+        public void update_status(string text)
         {
-            string filename = saveFileDialog2.FileName;
-            TreeNode node = SectorTree.SelectedNode;
-            CubeGrid cg = (CubeGrid)node.Tag;
-            File.WriteAllText(filename, cg.getXML());
+            this.label1.Text = text;
+            this.label1.Refresh();
+            Application.DoEvents();
         }
-
-
-
 
         private void SectorTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -128,7 +126,16 @@ namespace SpaceEditor
 
         private void exportShipMenuItem_Click(object sender, EventArgs e)
         {
-            saveFileDialog2.ShowDialog();
+            DialogResult result = saveFileDialog2.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string filename = saveFileDialog2.FileName;
+                TreeNode node = SectorTree.SelectedNode;
+                CubeGrid cg = (CubeGrid)node.Tag;
+                File.WriteAllText(filename, cg.getXML());
+                this.update_status("");
+            }
+            
         }
 
         private void cloneShipMenuItem_Click(object sender, EventArgs e)
@@ -157,7 +164,7 @@ namespace SpaceEditor
             if (result == DialogResult.OK)
             {
                 string file = fileopen.FileName;
-                this.sector = new Sector();
+                this.sector = new Sector(this);
                 SectorTree.Nodes.Clear();
                 Log = this.sector.loadFromXML(file,loggingEnabled);
                 if (loggingEnabled)
@@ -254,6 +261,7 @@ namespace SpaceEditor
             DialogResult result = fileopen.ShowDialog();
             if (result == DialogResult.OK)
             {
+                this.update_status("Importing Module");
                 string filename = fileopen.FileName;
                 string xml = File.ReadAllText(filename);
                 CubeGrid module = sector.loadCGFragment(xml, false);
@@ -297,6 +305,7 @@ namespace SpaceEditor
                     Console.WriteLine("Couldn't get module attachment");
                 }
             }
+            this.update_status("");
         }
 
         private void xToolStripMenuItem_Click(object sender, EventArgs e)
@@ -341,7 +350,7 @@ namespace SpaceEditor
             if (result == DialogResult.OK)
             {
                 string file = fileopen.FileName;
-                this.sector = new Sector();
+                this.sector = new Sector(this);
                 SectorTree.Nodes.Clear();
                 Log = this.sector.loadFromXML(file, loggingEnabled,quick);
                 if (loggingEnabled)
@@ -444,7 +453,7 @@ namespace SpaceEditor
             string file = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.sbs");
             if (File.Exists(file))
             {
-                this.sector = new Sector();
+                this.sector = new Sector(this);
                 SectorTree.Nodes.Clear();
                 label1.Text = "Loading...";
                 Log = this.sector.loadFromXML(file, loggingEnabled);
@@ -490,7 +499,7 @@ namespace SpaceEditor
             string file = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.sbs");
             if (File.Exists(file))
             {
-                this.sector = new Sector();
+                this.sector = new Sector(this);
                 SectorTree.Nodes.Clear();
                 Log = this.sector.loadFromXML(file, loggingEnabled, quick);
                 if (loggingEnabled)
@@ -578,6 +587,7 @@ namespace SpaceEditor
                 sector.CubeGrids.Add(new_cg);
                 SectorTree.Nodes.Clear();
                 SectorTree.Nodes.Add(sector.getTreeNode());
+                this.update_status("");
             }
         }
 

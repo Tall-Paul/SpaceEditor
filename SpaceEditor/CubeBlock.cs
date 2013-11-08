@@ -18,6 +18,8 @@ namespace SpaceEditor
         public bool hasPilot = false;
         public Character Pilot = null;
 
+        public CubeBlock(Sector parent) : base(parent) { }
+
         public void loadFromXML(XmlNode node)
         {
             base.loadFromXML(node);
@@ -30,13 +32,15 @@ namespace SpaceEditor
             if (myPilot != null)
             {
                 hasPilot = true;
-                Pilot = new Character();
+                Pilot = new Character(this.parent_sector);
                 Pilot.loadFromXML(myPilot,this.EntityId);
             }
+            this.displayType = this.SubTypeName;
         }
 
         public string getXML()
         {
+            
             string xml = "";
             xml += "<MyObjectBuilder_CubeBlock";
             if (this.XMLType != null)
@@ -52,6 +56,7 @@ namespace SpaceEditor
                 xml += this.Pilot.getXML();
             }
             xml += "</MyObjectBuilder_CubeBlock>\r\n";
+            
             return xml;
         }
 

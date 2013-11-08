@@ -21,6 +21,8 @@ namespace SpaceEditor
         public coord LinearVelocity = new coord();
         public string AutoenableJetPackDelay = "0";
 
+        public Character(Sector parent) : base(parent) { }
+
         public void loadFromXML(XmlNode node, string parent)
         {
            

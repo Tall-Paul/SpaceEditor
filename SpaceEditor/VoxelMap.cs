@@ -12,6 +12,8 @@ namespace SpaceEditor
     {
         public string Filename;
 
+        public VoxelMap(Sector parent) : base(parent) { }
+
         public void loadFromXML(XmlNode node)
         {
             base.loadFromXML(node);

@@ -9,7 +9,9 @@ namespace SpaceEditor
 {
     class entity_misc : EntityBase
     {
-        public string xml;        
+        public string xml;  
+      
+        public entity_misc(Sector parent) : base(parent) { }
 
         public void loadFromXML(XmlNode node)
         {

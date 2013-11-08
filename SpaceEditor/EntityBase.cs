@@ -17,6 +17,12 @@ namespace SpaceEditor
         public PandO PositionAndOrientation = new PandO();
         public string displayType = "Entity";
         public string actualType = "Entity";
+        public Sector parent_sector = null;
+
+        public EntityBase(Sector parent)
+        {
+            this.parent_sector = parent;
+        }
 
         public void loadFromXML(XmlNode node)
         {
@@ -26,6 +32,7 @@ namespace SpaceEditor
             XmlNode attr = node.Attributes["xsi:type"];
             if (attr != null && !string.IsNullOrEmpty(attr.Value))
                 this.XMLType = attr.Value;
+            parent_sector.main_form.update_status("Loaded: " + this.EntityId);
         }
 
         public TreeNode getTreeNode()
@@ -43,6 +50,7 @@ namespace SpaceEditor
             xml += "<EntityId>"+this.EntityId+"</EntityId>\r\n";
             xml += "<PersistentFlags>"+this.PersistentFlags+"</PersistentFlags>\r\n";
             xml += this.PositionAndOrientation.getXML();
+            this.parent_sector.main_form.update_status("Got Xml For:" + this.displayType);         
             return xml;
         }
 

@@ -72,8 +72,7 @@
             this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
             // 
             // saveFileDialog2
-            // 
-            this.saveFileDialog2.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog2_FileOk);
+            //             
             // 
             // shipmenu
             // 
@@ -278,19 +277,19 @@
             this.importShipToolStripMenuItem,
             this.cleanupToolStripMenuItem});
             this.shipcontainerMenu.Name = "shipcontainerMenu";
-            this.shipcontainerMenu.Size = new System.Drawing.Size(176, 80);            
+            this.shipcontainerMenu.Size = new System.Drawing.Size(157, 52);
             // 
             // importShipToolStripMenuItem
             // 
             this.importShipToolStripMenuItem.Name = "importShipToolStripMenuItem";
-            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.importShipToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
             this.importShipToolStripMenuItem.Text = "Import Ship";
             this.importShipToolStripMenuItem.Click += new System.EventHandler(this.importShipToolStripMenuItem_Click_1);
             // 
             // cleanupToolStripMenuItem
             // 
             this.cleanupToolStripMenuItem.Name = "cleanupToolStripMenuItem";
-            this.cleanupToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.cleanupToolStripMenuItem.Size = new System.Drawing.Size(156, 24);
             this.cleanupToolStripMenuItem.Text = "Cleanup";
             this.cleanupToolStripMenuItem.Click += new System.EventHandler(this.cleanupToolStripMenuItem_Click);
             // 
