@@ -58,9 +58,24 @@
             this.shipcontainerMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.importShipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cleanupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button5 = new System.Windows.Forms.Button();
+            this.NewEntityMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cloneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleStaticToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button6 = new System.Windows.Forms.Button();
+            this.saveGameMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.makeCopyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importShipToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.cleanupToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.shipmenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.shipcontainerMenu.SuspendLayout();
+            this.NewEntityMenuStrip1.SuspendLayout();
+            this.saveGameMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // fileopen
@@ -70,9 +85,6 @@
             // saveFileDialog1
             // 
             this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
-            // 
-            // saveFileDialog2
-            //             
             // 
             // shipmenu
             // 
@@ -188,9 +200,9 @@
             // SectorTree
             // 
             this.SectorTree.LabelEdit = true;
-            this.SectorTree.Location = new System.Drawing.Point(12, 40);
+            this.SectorTree.Location = new System.Drawing.Point(12, 12);
             this.SectorTree.Name = "SectorTree";
-            this.SectorTree.Size = new System.Drawing.Size(423, 370);
+            this.SectorTree.Size = new System.Drawing.Size(423, 412);
             this.SectorTree.TabIndex = 12;
             this.SectorTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.SectorTree_AfterLabelEdit);
             this.SectorTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.SectorTree_AfterSelect);
@@ -218,14 +230,14 @@
             // savegamesbox
             // 
             this.savegamesbox.FormattingEnabled = true;
-            this.savegamesbox.Location = new System.Drawing.Point(12, 9);
+            this.savegamesbox.Location = new System.Drawing.Point(466, 253);
             this.savegamesbox.Name = "savegamesbox";
-            this.savegamesbox.Size = new System.Drawing.Size(163, 24);
+            this.savegamesbox.Size = new System.Drawing.Size(75, 24);
             this.savegamesbox.TabIndex = 16;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(270, 8);
+            this.button1.Location = new System.Drawing.Point(470, 100);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(52, 25);
             this.button1.TabIndex = 17;
@@ -235,7 +247,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(328, 8);
+            this.button2.Location = new System.Drawing.Point(466, 162);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(49, 25);
             this.button2.TabIndex = 18;
@@ -245,7 +257,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(383, 8);
+            this.button3.Location = new System.Drawing.Point(470, 193);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(52, 25);
             this.button3.TabIndex = 19;
@@ -263,7 +275,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(181, 8);
+            this.button4.Location = new System.Drawing.Point(466, 131);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(65, 25);
             this.button4.TabIndex = 21;
@@ -293,11 +305,117 @@
             this.cleanupToolStripMenuItem.Text = "Cleanup";
             this.cleanupToolStripMenuItem.Click += new System.EventHandler(this.cleanupToolStripMenuItem_Click);
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(456, 71);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 22;
+            this.button5.Text = "Load";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
+            // NewEntityMenuStrip1
+            // 
+            this.NewEntityMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportToolStripMenuItem,
+            this.cloneToolStripMenuItem,
+            this.toggleStaticToolStripMenuItem,
+            this.deleteToolStripMenuItem});
+            this.NewEntityMenuStrip1.Name = "NewEntityMenuStrip1";
+            this.NewEntityMenuStrip1.Size = new System.Drawing.Size(167, 100);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.exportToolStripMenuItem.Text = "Export";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+            // 
+            // cloneToolStripMenuItem
+            // 
+            this.cloneToolStripMenuItem.Name = "cloneToolStripMenuItem";
+            this.cloneToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.cloneToolStripMenuItem.Text = "Clone";
+            this.cloneToolStripMenuItem.Visible = false;
+            this.cloneToolStripMenuItem.Click += new System.EventHandler(this.cloneToolStripMenuItem_Click);
+            // 
+            // toggleStaticToolStripMenuItem
+            // 
+            this.toggleStaticToolStripMenuItem.Name = "toggleStaticToolStripMenuItem";
+            this.toggleStaticToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.toggleStaticToolStripMenuItem.Text = "Toggle Static";
+            this.toggleStaticToolStripMenuItem.Click += new System.EventHandler(this.toggleStaticToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(166, 24);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Visible = false;
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(466, 224);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.TabIndex = 24;
+            this.button6.Text = "Save";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // saveGameMenuStrip1
+            // 
+            this.saveGameMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadToolStripMenuItem,
+            this.saveToolStripMenuItem,
+            this.makeCopyToolStripMenuItem,
+            this.importShipToolStripMenuItem1,
+            this.cleanupToolStripMenuItem1});
+            this.saveGameMenuStrip1.Name = "saveGameMenuStrip1";
+            this.saveGameMenuStrip1.Size = new System.Drawing.Size(157, 124);
+            // 
+            // loadToolStripMenuItem
+            // 
+            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.loadToolStripMenuItem.Text = "Load";
+            this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click_1);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click_1);
+            // 
+            // makeCopyToolStripMenuItem
+            // 
+            this.makeCopyToolStripMenuItem.Name = "makeCopyToolStripMenuItem";
+            this.makeCopyToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.makeCopyToolStripMenuItem.Text = "Make Copy";
+            this.makeCopyToolStripMenuItem.Click += new System.EventHandler(this.makeCopyToolStripMenuItem_Click);
+            // 
+            // importShipToolStripMenuItem1
+            // 
+            this.importShipToolStripMenuItem1.Name = "importShipToolStripMenuItem1";
+            this.importShipToolStripMenuItem1.Size = new System.Drawing.Size(175, 24);
+            this.importShipToolStripMenuItem1.Text = "Import Ship";
+            this.importShipToolStripMenuItem1.Click += new System.EventHandler(this.importShipToolStripMenuItem1_Click);
+            // 
+            // cleanupToolStripMenuItem1
+            // 
+            this.cleanupToolStripMenuItem1.Name = "cleanupToolStripMenuItem1";
+            this.cleanupToolStripMenuItem1.Size = new System.Drawing.Size(156, 24);
+            this.cleanupToolStripMenuItem1.Text = "Cleanup";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(447, 436);
+            this.ClientSize = new System.Drawing.Size(443, 436);
+            this.Controls.Add(this.button6);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button3);
@@ -315,6 +433,8 @@
             this.shipmenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.shipcontainerMenu.ResumeLayout(false);
+            this.NewEntityMenuStrip1.ResumeLayout(false);
+            this.saveGameMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -351,6 +471,19 @@
         private System.Windows.Forms.ContextMenuStrip shipcontainerMenu;
         private System.Windows.Forms.ToolStripMenuItem importShipToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cleanupToolStripMenuItem;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.ContextMenuStrip NewEntityMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cloneToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toggleStaticToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.ContextMenuStrip saveGameMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem makeCopyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importShipToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem cleanupToolStripMenuItem1;
     }
 }
 

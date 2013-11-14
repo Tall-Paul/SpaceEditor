@@ -33,10 +33,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
-    <Reference Include="Sandbox.CommonLib">
+    <Reference Include="Sandbox.CommonLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Sandbox.CommonLib.dll</HintPath>
     </Reference>
-    <Reference Include="Sandbox.CommonLib.XmlSerializers">
+    <Reference Include="Sandbox.CommonLib.XmlSerializers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Sandbox.CommonLib.XmlSerializers.dll</HintPath>
     </Reference>
     <Reference Include="SteamSDK">

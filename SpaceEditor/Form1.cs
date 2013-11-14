@@ -15,6 +15,8 @@ using System.Diagnostics;
 using System.Windows.Media.Media3D;
 using Microsoft.Win32;
 using System.Security.Permissions;
+using Sandbox.CommonLib.ObjectBuilders;
+using Sandbox.CommonLib.ObjectBuilders.Voxels;
 
 [assembly: RegistryPermissionAttribute(SecurityAction.RequestMinimum,
     ViewAndModify = "HKEY_CURRENT_USER")]
@@ -24,7 +26,9 @@ namespace SpaceEditor
     public partial class Form1 : Form
     {
         private Sector sector;
-        private string myVersion = "0.9.61";
+        private MyObjectBuilder_Sector mySector = null;
+
+        private string myVersion = "2.0.0";
         private bool loggingEnabled = false;
         public string Log = "";
         public string steam_install_path = "";
@@ -77,6 +81,10 @@ namespace SpaceEditor
 
         private void SectorTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
+
+                this.sectortree_select();
+                return;
+
             TreeNode node = SectorTree.SelectedNode;
             SectorTree.LabelEdit = false;
             if (node.Tag != null)
@@ -117,6 +125,10 @@ namespace SpaceEditor
                     if (SectorTree.SelectedNode.Text == "Ships / stations")
                     {
                         SectorTree.SelectedNode.ContextMenuStrip = this.shipcontainerMenu;
+                    }
+                    else
+                    {
+                        this.sectortree_select();
                     }
                 }
                 catch { }
@@ -410,9 +422,10 @@ namespace SpaceEditor
                 var saves = Directory.GetDirectories(saves_path);
                 foreach (String savegame in saves)
                 {
-                    savegamesbox.Items.Add(savegame.Split(Path.DirectorySeparatorChar).Last());
+                    SectorTree.Nodes.Add(savegame.Split(Path.DirectorySeparatorChar).Last());
+                    //savegamesbox.Items.Add(savegame.Split(Path.DirectorySeparatorChar).Last());
                 }
-                savegamesbox.SelectedIndex = 0;
+               
             }
             else
             {
@@ -438,6 +451,35 @@ namespace SpaceEditor
                     else
                         MessageBox.Show("Unable to locate VRage Math Library!!");
                 }
+                if (!File.Exists(Path.Combine(current_path, "VRage.Common.dll")))
+                {
+                    if (File.Exists(Path.Combine(this.steam_install_path, "VRage.Common.dll")))
+                        File.Copy(Path.Combine(this.steam_install_path, "VRage.Common.dll"), Path.Combine(current_path, "VRage.Common.dll"));
+                    else
+                        MessageBox.Show("Unable to locate VRage Math Library!!");
+                }
+                if (!File.Exists(Path.Combine(current_path, "VRage.Library.dll")))
+                {
+                    if (File.Exists(Path.Combine(this.steam_install_path, "VRage.Library.dll")))
+                        File.Copy(Path.Combine(this.steam_install_path, "VRage.Library.dll"), Path.Combine(current_path, "VRage.Library.dll"));
+                    else
+                        MessageBox.Show("Unable to locate VRage Math Library!!");
+                }
+                if (!File.Exists(Path.Combine(current_path, "SandBox.CommonLib.dll")))
+                {
+                    if (File.Exists(Path.Combine(this.steam_install_path, "SandBox.CommonLib.dll")))
+                        File.Copy(Path.Combine(this.steam_install_path, "SandBox.CommonLib.dll"), Path.Combine(current_path, "SandBox.CommonLib.dll"));
+                    else
+                        MessageBox.Show("Unable to locate SandBox Common Library!!");
+                }
+                if (!File.Exists(Path.Combine(current_path, "SandBox.CommonLib.XmlSerializers.dll")))
+                {
+                    if (File.Exists(Path.Combine(this.steam_install_path, "SandBox.CommonLib.XmlSerializers.dll")))
+                        File.Copy(Path.Combine(this.steam_install_path, "SandBox.CommonLib.XmlSerializers.dll"), Path.Combine(current_path, "SandBox.CommonLib.XmlSerializers.dll"));
+                    else
+                        MessageBox.Show("Unable to locate SandBox Common Library!!");
+                }
+
             }
             else
             {
@@ -617,6 +659,291 @@ namespace SpaceEditor
             }
         }
 
+        //###################################################################### new stuff below this line ######################//
+       
+
+        private MyObjectBuilder_CubeGrid clone_grid(MyObjectBuilder_CubeGrid old_grid)
+        {
+            using (MemoryStream input_stream = new MemoryStream())
+            {
+                MyObjectBuilder_Base.Serialize(input_stream, old_grid);                
+                MyObjectBuilder_CubeGrid new_grid = (MyObjectBuilder_CubeGrid)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.CubeGrid);
+                using (MemoryStream output_stream = new MemoryStream()){
+                    input_stream.CopyTo(output_stream);
+                    output_stream.Seek(0, 0);
+                    MyObjectBuilder_Base.Deserialize(output_stream, out new_grid);
+                }
+                
+                return new_grid;
+            }
+
+        }
+      
+        private TreeNode newCubeGridNode(MyObjectBuilder_CubeGrid myGrid)
+        {
+            TreeNode node = null;
+            if (myGrid.GridSizeEnum == MyCubeSize.Small)
+                node = new TreeNode("Small Ship");
+            if (myGrid.GridSizeEnum == MyCubeSize.Large)
+                if (myGrid.IsStatic)
+                    node = new TreeNode("Station");
+                else
+                    node = new TreeNode("Large Ship");
+            node.Tag = myGrid;
+            node.Nodes.Add(new TreeNode(myGrid.EntityId.ToString()));
+            node.Nodes.Add(new TreeNode(myGrid.PositionAndOrientation.ToString()));
+            node.Nodes.Add(myGrid.CubeBlocks.Count()+" Blocks");
+            return node;
+        }
+
+            private void create_tree(TreeNode savegame, MyObjectBuilder_Sector mySector){
+                savegame.Nodes.Clear();
+                TreeNode ships = new TreeNode("Ships / Stations");
+                TreeNode VoxelMaps = new TreeNode("Asteroids / Moons");
+                TreeNode node = null;
+                foreach (Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_EntityBase eb in mySector.SectorObjects)
+                {
+                    switch(eb.GetObjectBuilderTypeId()){
+                        case MyObjectBuilderTypeEnum.VoxelMap:
+                            MyObjectBuilder_VoxelMap myMap = (MyObjectBuilder_VoxelMap)eb;
+                            node = new TreeNode("Asteroid");
+                            node.Tag = myMap;
+                            node.Nodes.Add(new TreeNode(myMap.EntityId.ToString()));
+                            node.Nodes.Add(new TreeNode(myMap.PositionAndOrientation.ToString()));
+                            node.Nodes.Add(new TreeNode(myMap.Filename.ToString()));
+                            VoxelMaps.Nodes.Add(node);
+                        break;
+                        case MyObjectBuilderTypeEnum.CubeGrid:
+                            ships.Nodes.Add(this.newCubeGridNode((MyObjectBuilder_CubeGrid)eb));
+                        break;
+                    }
+                }
+                savegame.Nodes.Add(ships);
+                savegame.Nodes.Add(VoxelMaps);
+                savegame.Tag = mySector;
+            }
+
+            private void sectortree_select()
+            {
+                SectorTree.ContextMenuStrip = null;
+                Console.WriteLine(SectorTree.SelectedNode.Text);
+                switch (SectorTree.SelectedNode.Text)
+                {
+                    case "Station":
+                    case "Large Ship":
+                        toggleStaticToolStripMenuItem.Visible = true;
+                        SectorTree.ContextMenuStrip = NewEntityMenuStrip1;
+                    break;
+                    case "Small Ship":
+                    case "Asteroid":
+                        toggleStaticToolStripMenuItem.Visible = false;
+                        SectorTree.ContextMenuStrip = NewEntityMenuStrip1;
+                    break;
+                    case "Ships / Stations":
+                    break;
+                    case "Asteroids / Moons":
+                    break;
+                    default:
+                        //anything else must be a save game node
+                        SectorTree.ContextMenuStrip = saveGameMenuStrip1;
+                    break;
+                }
+            }
+
+            //export ship
+            private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+            {
+                DialogResult result = saveFileDialog2.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    string filename = saveFileDialog2.FileName;
+                    TreeNode node = SectorTree.SelectedNode;
+                    MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
+                    switch (myBase.GetObjectBuilderTypeId())
+                    {
+                        case MyObjectBuilderTypeEnum.CubeGrid:                            
+                            using (FileStream sr = File.Open(filename, FileMode.Create))
+                            {
+                                MyObjectBuilder_Base.SerializeXML(sr, (MyObjectBuilder_CubeGrid)SectorTree.SelectedNode.Tag);
+                            }
+                        break;
+                        case MyObjectBuilderTypeEnum.VoxelMap:
+                            using (FileStream sr = File.Open(filename, FileMode.Open))
+                            {
+                                MyObjectBuilder_Base.SerializeXML(sr, (MyObjectBuilder_VoxelMap)SectorTree.SelectedNode.Tag);
+                            }
+                        break;
+                    }                   
+                }
+            }
+
+            private void cloneToolStripMenuItem_Click(object sender, EventArgs e)
+            {
+                TreeNode node = SectorTree.SelectedNode;
+                MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
+                if (myBase.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.CubeGrid)
+                {                    
+
+                   MyObjectBuilder_CubeGrid myGrid = this.clone_grid((MyObjectBuilder_CubeGrid)myBase);                    
+                    MyPositionAndOrientation myGridPos = (MyPositionAndOrientation)myGrid.PositionAndOrientation;
+                    myGridPos.Position.X = myGridPos.Position.X + 100;
+                    node.Parent.Nodes.Add(newCubeGridNode(myGrid));
+                }
+            }
+
+            private void toggleStaticToolStripMenuItem_Click(object sender, EventArgs e)
+            {
+                TreeNode node = SectorTree.SelectedNode;
+                MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
+                if (myBase.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.CubeGrid)
+                {
+                    MyObjectBuilder_CubeGrid myGrid = (MyObjectBuilder_CubeGrid)myBase;
+                    if (myGrid.GridSizeEnum == MyCubeSize.Large)
+                    {
+                        if (myGrid.IsStatic)
+                            myGrid.IsStatic = false;
+                        else
+                            myGrid.IsStatic = true;
+                    }
+                    node.Parent.Nodes.Add(this.newCubeGridNode(myGrid));
+                    node.Remove();
+                }
+                
+
+
+            }
+            
+            //save sector
+            private void button6_Click(object sender, EventArgs e)
+            {
+                DialogResult dialogResult = MessageBox.Show("Overwrite \"" + savegamesbox.SelectedItem.ToString() + "\"?", "Save", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+
+                    string file = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.sbs");
+                    string backupfile = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.BAK2");
+                    File.Copy(file, backupfile, true);
+                    label1.Text = "Saving...";
+                    using (FileStream sr = File.Open(file, FileMode.Open))
+                    {
+                        MyObjectBuilder_Base.SerializeXML(sr, mySector);
+                    }                    
+                    label1.Text = "";
+                }
+            }
+            
+            //load sector
+            private void loadToolStripMenuItem_Click_1(object sender, EventArgs e)
+            {
+                string file = Path.Combine(this.saves_path, SectorTree.SelectedNode.Text, "SANDBOX_0_0_0_.sbs");
+                if (File.Exists(file))
+                {
+                    Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Base sec = Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Base.CreateNewObject(Sandbox.CommonLib.ObjectBuilders.MyObjectBuilderTypeEnum.Sector);
+                    MyObjectBuilder_Sector mySector = (Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Sector)sec;
+                    Console.WriteLine(mySector.Position.ToString());
+                    try
+                    {
+                        using (FileStream sr = File.Open(file, FileMode.Open))
+                        {
+                            if (Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Base.DeserializeXML(sr, out mySector))
+                            {
+                                this.create_tree(SectorTree.SelectedNode, mySector);
+                            }
+                        }
+                    }
+                    catch (System.NullReferenceException)
+                    {
+                        MessageBox.Show("Unable to load that savegame, please report this!");
+                    }
+                }
+            }
+            
+            //save sector
+            private void saveToolStripMenuItem_Click_1(object sender, EventArgs e)
+            {
+                DialogResult dialogResult = MessageBox.Show("Overwrite \"" + SectorTree.SelectedNode.Text + "\"?", "Save", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+
+                    string file = Path.Combine(this.saves_path, SectorTree.SelectedNode.Text, "SANDBOX_0_0_0_.sbs");
+                    string backupfile = Path.Combine(this.saves_path, SectorTree.SelectedNode.Text, "SANDBOX_0_0_0_.BAK2");
+                    File.Copy(file, backupfile, true);
+                    label1.Text = "Saving...";
+                    MyObjectBuilder_Sector mySector = (MyObjectBuilder_Sector)SectorTree.SelectedNode.Tag;
+                    using (FileStream sr = File.Open(file, FileMode.Open))
+                    {
+                        MyObjectBuilder_Base.SerializeXML(sr, mySector);
+                        sr.Dispose();
+                    }
+                    
+                    label1.Text = "";
+                }
+            }
+            
+
+
+            private void makeCopyToolStripMenuItem_Click(object sender, EventArgs e)
+            {
+                String savegame = "";
+                DialogResult result = Form1.InputBox("Copy SaveGame", "Enter the name of the new savegame", ref savegame);
+                if (result == DialogResult.OK && savegame != "")
+                {
+                    String oldpath = Path.Combine(this.saves_path, SectorTree.SelectedNode.Text);
+                    String newpath = Path.Combine(this.saves_path, savegame);
+                    if (!Directory.Exists(newpath))
+                    {
+                        Directory.CreateDirectory(newpath);
+                    }
+                    foreach (String file in Directory.GetFiles(oldpath))
+                    {
+                        String filename = file.Split(Path.DirectorySeparatorChar).Last();
+                        String new_file = Path.Combine(newpath, filename);
+                        File.Copy(file, new_file, true);
+                    }
+                    SectorTree.Nodes.Add(savegame);
+                }
+            }
+
+            private void importShipToolStripMenuItem1_Click(object sender, EventArgs e)
+            {
+                DialogResult result = fileopen.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    string filename = fileopen.FileName;
+                    MyObjectBuilder_CubeGrid MyCubeGrid = (MyObjectBuilder_CubeGrid)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.CubeGrid);                    
+                    using (FileStream sr = File.Open(filename, FileMode.Open))
+                    {
+                        if (Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Base.DeserializeXML(sr, out MyCubeGrid))
+                        {
+                            TreeNode savegame_node = SectorTree.SelectedNode;
+                            MyObjectBuilder_Sector mySector = (MyObjectBuilder_Sector)savegame_node.Tag;
+                            mySector.SectorObjects.Add(MyCubeGrid);
+                            this.create_tree(savegame_node, mySector);
+                        }
+                    }
+
+                }
+            }
+
+            private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+            {
+                TreeNode node = SectorTree.SelectedNode;
+                MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
+                if (myBase.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.CubeGrid)
+                {
+                    MyObjectBuilder_CubeGrid myGrid = (MyObjectBuilder_CubeGrid)myBase;
+                    TreeNode SectorNode = node.Parent.Parent;
+                    MyObjectBuilder_Sector mySector = (MyObjectBuilder_Sector)SectorNode.Tag;
+                    mySector.SectorObjects.Remove(myGrid);
+                    node.Remove();
+                }
+            }
+
+
+
+
+        }
+
 
 
 
@@ -624,4 +951,4 @@ namespace SpaceEditor
 
        
     }
-}
+
