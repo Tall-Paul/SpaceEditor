@@ -28,11 +28,12 @@ namespace SpaceEditor
         private Sector sector;
         private MyObjectBuilder_Sector mySector = null;
 
-        private string myVersion = "2.0.0";
+        private string myVersion = "2.0.1";
         private bool loggingEnabled = false;
         public string Log = "";
         public string steam_install_path = "";
         public string saves_path = "";
+        public static Random rnd = new Random();
 
         public Form1()
         {
@@ -250,6 +251,7 @@ namespace SpaceEditor
             SectorTree.Nodes.Add(sector.getTreeNode());
         }
 
+        /*
         private void thumbnailToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TreeNode node = SectorTree.SelectedNode;
@@ -261,7 +263,7 @@ namespace SpaceEditor
         {
             loggingEnabled = loggingCheck.Checked;
         }
-
+        */
         
 
         
@@ -412,9 +414,10 @@ namespace SpaceEditor
 
         }
 
+        
         private void load_saves() {
             //load saves
-            savegamesbox.Items.Clear();
+            
             var paths = Directory.GetDirectories(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SpaceEngineers", "Saves"));
             if (paths != null && paths.Length > 0)
             {
@@ -423,7 +426,7 @@ namespace SpaceEditor
                 foreach (String savegame in saves)
                 {
                     SectorTree.Nodes.Add(savegame.Split(Path.DirectorySeparatorChar).Last());
-                    //savegamesbox.Items.Add(savegame.Split(Path.DirectorySeparatorChar).Last());
+                   
                 }
                
             }
@@ -432,7 +435,7 @@ namespace SpaceEditor
                 MessageBox.Show("Can't find save games!!");
             }
         }
-
+        
         
 
         private void Form1_Load(object sender, EventArgs e)
@@ -490,91 +493,13 @@ namespace SpaceEditor
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            string file = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.sbs");
-            if (File.Exists(file))
-            {
-                this.sector = new Sector(this);
-                SectorTree.Nodes.Clear();
-                label1.Text = "Loading...";
-                Log = this.sector.loadFromXML(file, loggingEnabled);
-                if (loggingEnabled)
-                    File.WriteAllText("./Log.txt", Log);
-                Log = "";
-                TreeNode node = sector.getTreeNode();
-                node.Text = savegamesbox.SelectedItem.ToString();
-                SectorTree.Nodes.Add(node);
-                mirrorBlocksToolStripMenuItem.Visible = true;
-                label1.Text = "";
-            }
-        }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            DialogResult dialogResult = MessageBox.Show("Overwrite \"" + savegamesbox.SelectedItem.ToString()+"\"?", "Save", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
+      
 
-                string file = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.sbs");
-                string backupfile = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.BAK");
-                File.Copy(file, backupfile, true);
-                label1.Text = "Saving...";
-                File.WriteAllText(file, this.sector.getXML());
-                label1.Text = "";
-            }
+ 
 
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            bool quick = false;
-            DialogResult dialogResult = MessageBox.Show("Quick load is currently considered unstable, proceed with caution and always make a backup! \r\n\r\n  Hit 'Yes' to continue or 'No' to do a standard load.", "Quick load?", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                quick = true;
-            }
-            else if (dialogResult == DialogResult.No)
-            {
-                quick = false;
-            }            
-            string file = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.sbs");
-            if (File.Exists(file))
-            {
-                this.sector = new Sector(this);
-                SectorTree.Nodes.Clear();
-                Log = this.sector.loadFromXML(file, loggingEnabled, quick);
-                if (loggingEnabled)
-                    File.WriteAllText("./Log.txt", Log);
-                Log = "";
-                SectorTree.Nodes.Add(sector.getTreeNode());
-                mirrorBlocksToolStripMenuItem.Visible = false;
-            }
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            String savegame = "";
-            DialogResult result = Form1.InputBox("Copy SaveGame","Enter the name of the new savegame",ref savegame);
-            if (result == DialogResult.OK && savegame != "")
-            {
-                String oldpath = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString());
-                String newpath = Path.Combine(this.saves_path,savegame);
-                if (!Directory.Exists(newpath))
-                {
-                    Directory.CreateDirectory(newpath);
-                }
-                foreach (String file in Directory.GetFiles(oldpath))
-                {
-                    String filename = file.Split(Path.DirectorySeparatorChar).Last();
-                    String new_file = Path.Combine(newpath, filename);
-                    File.Copy(file, new_file, true);                    
-                }
-                this.load_saves();
-            }
-            
-
-        }
+      
+      
 
         public static DialogResult InputBox(string title, string promptText, ref string value)
         {
@@ -634,28 +559,17 @@ namespace SpaceEditor
         }
 
 
-        private void cleanupToolStripMenuItem_Click(object sender, EventArgs e)
+        private void cleanupToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             String threshold = "";
             DialogResult result = Form1.InputBox("Cleanup","Delete any entities with less than this number of blocks",ref threshold);
             if (result == DialogResult.OK && threshold != "")
             {
-                List<CubeGrid> deletions = new List<CubeGrid>();
-                int thresher = int.Parse(threshold);
-                foreach (CubeGrid cg in sector.CubeGrids)
-                {
-                    Console.WriteLine(cg.getBlockcount());
-                    if (cg.getBlockcount() < thresher)
-                    {
-                        deletions.Add(cg);
-                    }
-                }
-                foreach (CubeGrid cg in deletions)
-                {
-                    sector.CubeGrids.Remove(cg);
-                }
-                SectorTree.Nodes.Clear();
-                SectorTree.Nodes.Add(sector.getTreeNode());
+                List<MyObjectBuilder_CubeGrid> deletions = new List<MyObjectBuilder_CubeGrid>();
+                int thresher = int.Parse(threshold);                
+
+                
+               
             }
         }
 
@@ -683,12 +597,12 @@ namespace SpaceEditor
         {
             TreeNode node = null;
             if (myGrid.GridSizeEnum == MyCubeSize.Small)
-                node = new TreeNode("Small Ship");
+                node = new TreeNode("Small Ship [" + myGrid.CubeBlocks.Count()+"]");
             if (myGrid.GridSizeEnum == MyCubeSize.Large)
                 if (myGrid.IsStatic)
-                    node = new TreeNode("Station");
+                    node = new TreeNode("Station [" + myGrid.CubeBlocks.Count() + "]");
                 else
-                    node = new TreeNode("Large Ship");
+                    node = new TreeNode("Large Ship [" + myGrid.CubeBlocks.Count() + "]");
             node.Tag = myGrid;
             node.Nodes.Add(new TreeNode(myGrid.EntityId.ToString()));
             node.Nodes.Add(new TreeNode(myGrid.PositionAndOrientation.ToString()));
@@ -726,28 +640,22 @@ namespace SpaceEditor
             private void sectortree_select()
             {
                 SectorTree.ContextMenuStrip = null;
-                Console.WriteLine(SectorTree.SelectedNode.Text);
-                switch (SectorTree.SelectedNode.Text)
+                if (SectorTree.SelectedNode.Text.StartsWith("Large Ship") || SectorTree.SelectedNode.Text.StartsWith("Station"))
                 {
-                    case "Station":
-                    case "Large Ship":
-                        toggleStaticToolStripMenuItem.Visible = true;
-                        SectorTree.ContextMenuStrip = NewEntityMenuStrip1;
-                    break;
-                    case "Small Ship":
-                    case "Asteroid":
-                        toggleStaticToolStripMenuItem.Visible = false;
-                        SectorTree.ContextMenuStrip = NewEntityMenuStrip1;
-                    break;
-                    case "Ships / Stations":
-                    break;
-                    case "Asteroids / Moons":
-                    break;
-                    default:
-                        //anything else must be a save game node
-                        SectorTree.ContextMenuStrip = saveGameMenuStrip1;
-                    break;
+                    toggleStaticToolStripMenuItem.Visible = true;
+                    SectorTree.ContextMenuStrip = NewEntityMenuStrip1;
+                    return;
                 }
+                if (SectorTree.SelectedNode.Text.StartsWith("Small Ship"))
+                {
+                    toggleStaticToolStripMenuItem.Visible = false;
+                    SectorTree.ContextMenuStrip = NewEntityMenuStrip1;
+                    return;
+                }
+                if ((SectorTree.SelectedNode.Text == "Asteroids / Moons") || (SectorTree.SelectedNode.Text ==  "Ships / Stations"))
+                    return;
+                //default is a savegame node
+                SectorTree.ContextMenuStrip = saveGameMenuStrip1;
             }
 
             //export ship
@@ -813,24 +721,7 @@ namespace SpaceEditor
 
             }
             
-            //save sector
-            private void button6_Click(object sender, EventArgs e)
-            {
-                DialogResult dialogResult = MessageBox.Show("Overwrite \"" + savegamesbox.SelectedItem.ToString() + "\"?", "Save", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
-                {
-
-                    string file = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.sbs");
-                    string backupfile = Path.Combine(this.saves_path, savegamesbox.SelectedItem.ToString(), "SANDBOX_0_0_0_.BAK2");
-                    File.Copy(file, backupfile, true);
-                    label1.Text = "Saving...";
-                    using (FileStream sr = File.Open(file, FileMode.Open))
-                    {
-                        MyObjectBuilder_Base.SerializeXML(sr, mySector);
-                    }                    
-                    label1.Text = "";
-                }
-            }
+        
             
             //load sector
             private void loadToolStripMenuItem_Click_1(object sender, EventArgs e)
@@ -867,10 +758,12 @@ namespace SpaceEditor
 
                     string file = Path.Combine(this.saves_path, SectorTree.SelectedNode.Text, "SANDBOX_0_0_0_.sbs");
                     string backupfile = Path.Combine(this.saves_path, SectorTree.SelectedNode.Text, "SANDBOX_0_0_0_.BAK2");
-                    File.Copy(file, backupfile, true);
+                    if (File.Exists(backupfile))
+                        File.Delete(backupfile);
+                    File.Move(file, backupfile);                    
                     label1.Text = "Saving...";
                     MyObjectBuilder_Sector mySector = (MyObjectBuilder_Sector)SectorTree.SelectedNode.Tag;
-                    using (FileStream sr = File.Open(file, FileMode.Open))
+                    using (FileStream sr = File.Open(file, FileMode.Create))
                     {
                         MyObjectBuilder_Base.SerializeXML(sr, mySector);
                         sr.Dispose();
@@ -925,6 +818,31 @@ namespace SpaceEditor
                 }
             }
 
+            public static long generate_new_id()
+            {               
+                long min = long.MinValue;
+                long max = long.MaxValue;
+                ulong uRange = (ulong)(max - min);
+                ulong ulongRand;
+                do
+                {
+                    byte[] buf = new byte[8];
+                    rnd.NextBytes(buf);
+                    ulongRand = (ulong)BitConverter.ToInt64(buf, 0);
+                } while (ulongRand > ulong.MaxValue - ((ulong.MaxValue % uRange) + 1) % uRange);
+                long result = (long)(ulongRand % uRange) + min;
+                return result;
+            }
+
+            private void regenerateIDs(MyObjectBuilder_CubeGrid mg)
+            {
+                mg.EntityId = Form1.generate_new_id();
+                foreach (MyObjectBuilder_CubeBlock cb in mg.CubeBlocks)
+                {
+                    cb.EntityId = Form1.generate_new_id();
+                }
+            }
+
             private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
             {
                 TreeNode node = SectorTree.SelectedNode;
@@ -934,10 +852,57 @@ namespace SpaceEditor
                     MyObjectBuilder_CubeGrid myGrid = (MyObjectBuilder_CubeGrid)myBase;
                     TreeNode SectorNode = node.Parent.Parent;
                     MyObjectBuilder_Sector mySector = (MyObjectBuilder_Sector)SectorNode.Tag;
+                    Console.WriteLine(mySector.SectorObjects.Count());
                     mySector.SectorObjects.Remove(myGrid);
+                    mySector.SectorObjects.TrimExcess();
+                    Console.WriteLine(mySector.SectorObjects.Count());
                     node.Remove();
                 }
             }
+
+            private void moveToolStripMenuItem_Click(object sender, EventArgs e)
+            {
+                TreeNode node = SectorTree.SelectedNode;
+                MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
+                if (myBase.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.CubeGrid)
+                {
+                    MyObjectBuilder_CubeGrid myGrid = (MyObjectBuilder_CubeGrid)myBase;
+                    Form2 newform = new Form2(this);
+                    MyPositionAndOrientation pos = (MyPositionAndOrientation)myGrid.PositionAndOrientation;
+                    newform.Show();
+                    newform.setVals(pos.Position.X, pos.Position.Y, pos.Position.Z);
+                }
+            }
+
+            public void setPosition(float x, float y, float z)
+            {
+                TreeNode node = SectorTree.SelectedNode;
+                MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
+                if (myBase.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.CubeGrid)
+                {
+                    MyObjectBuilder_CubeGrid myGrid = (MyObjectBuilder_CubeGrid)myBase;
+                    MyPositionAndOrientation pos = (MyPositionAndOrientation)myGrid.PositionAndOrientation;
+                    pos.Position.X = x;
+                    pos.Position.Y = y;
+                    pos.Position.Z = z;
+                    myGrid.PositionAndOrientation = pos;
+                }
+            }
+
+            private void regenerateIDsToolStripMenuItem_Click(object sender, EventArgs e)
+            {
+                 TreeNode node = SectorTree.SelectedNode;
+                MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
+                if (myBase.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.CubeGrid)
+                {
+                    MyObjectBuilder_CubeGrid myGrid = (MyObjectBuilder_CubeGrid)myBase;
+                    this.regenerateIDs(myGrid);
+                }
+
+
+            }
+
+      
 
 
 
