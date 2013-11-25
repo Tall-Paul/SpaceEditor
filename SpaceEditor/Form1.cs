@@ -28,7 +28,7 @@ namespace SpaceEditor
         private Sector sector;
         private MyObjectBuilder_Sector mySector = null;
 
-        private string myVersion = "2.0.1";
+        private string myVersion = "2.0.2";
         private bool loggingEnabled = false;
         public string Log = "";
         public string steam_install_path = "";
@@ -900,6 +900,11 @@ namespace SpaceEditor
                 }
 
 
+            }
+
+            private void SectorTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+            {
+                SectorTree.SelectedNode = e.Node;
             }
 
       

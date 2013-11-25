@@ -197,6 +197,7 @@
             this.SectorTree.TabIndex = 12;
             this.SectorTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.SectorTree_AfterLabelEdit);
             this.SectorTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.SectorTree_AfterSelect);
+            this.SectorTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SectorTree_NodeMouseClick);
             // 
             // label1
             // 
