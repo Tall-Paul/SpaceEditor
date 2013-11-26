@@ -57,13 +57,14 @@
             this.toggleStaticToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.regenerateIDsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveGameMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.makeCopyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importShipToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.cleanupToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.regenerateIDsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removePilotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shipmenu.SuspendLayout();
             this.shipcontainerMenu.SuspendLayout();
             this.NewEntityMenuStrip1.SuspendLayout();
@@ -236,21 +237,22 @@
             this.toggleStaticToolStripMenuItem,
             this.deleteToolStripMenuItem,
             this.moveToolStripMenuItem,
-            this.regenerateIDsToolStripMenuItem});
+            this.regenerateIDsToolStripMenuItem,
+            this.removePilotToolStripMenuItem});
             this.NewEntityMenuStrip1.Name = "NewEntityMenuStrip1";
-            this.NewEntityMenuStrip1.Size = new System.Drawing.Size(180, 148);
+            this.NewEntityMenuStrip1.Size = new System.Drawing.Size(180, 200);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(179, 24);
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
             // cloneToolStripMenuItem
             // 
             this.cloneToolStripMenuItem.Name = "cloneToolStripMenuItem";
-            this.cloneToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.cloneToolStripMenuItem.Size = new System.Drawing.Size(179, 24);
             this.cloneToolStripMenuItem.Text = "Clone";
             this.cloneToolStripMenuItem.Visible = false;
             this.cloneToolStripMenuItem.Click += new System.EventHandler(this.cloneToolStripMenuItem_Click);
@@ -258,23 +260,30 @@
             // toggleStaticToolStripMenuItem
             // 
             this.toggleStaticToolStripMenuItem.Name = "toggleStaticToolStripMenuItem";
-            this.toggleStaticToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.toggleStaticToolStripMenuItem.Size = new System.Drawing.Size(179, 24);
             this.toggleStaticToolStripMenuItem.Text = "Toggle Static";
             this.toggleStaticToolStripMenuItem.Click += new System.EventHandler(this.toggleStaticToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(179, 24);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // moveToolStripMenuItem
             // 
             this.moveToolStripMenuItem.Name = "moveToolStripMenuItem";
-            this.moveToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.moveToolStripMenuItem.Size = new System.Drawing.Size(179, 24);
             this.moveToolStripMenuItem.Text = "Move";
             this.moveToolStripMenuItem.Click += new System.EventHandler(this.moveToolStripMenuItem_Click);
+            // 
+            // regenerateIDsToolStripMenuItem
+            // 
+            this.regenerateIDsToolStripMenuItem.Name = "regenerateIDsToolStripMenuItem";
+            this.regenerateIDsToolStripMenuItem.Size = new System.Drawing.Size(179, 24);
+            this.regenerateIDsToolStripMenuItem.Text = "Regenerate IDs";
+            this.regenerateIDsToolStripMenuItem.Click += new System.EventHandler(this.regenerateIDsToolStripMenuItem_Click);
             // 
             // saveGameMenuStrip1
             // 
@@ -323,12 +332,12 @@
             this.cleanupToolStripMenuItem1.Visible = false;
             this.cleanupToolStripMenuItem1.Click += new System.EventHandler(this.cleanupToolStripMenuItem1_Click);
             // 
-            // regenerateIDsToolStripMenuItem
+            // removePilotToolStripMenuItem
             // 
-            this.regenerateIDsToolStripMenuItem.Name = "regenerateIDsToolStripMenuItem";
-            this.regenerateIDsToolStripMenuItem.Size = new System.Drawing.Size(179, 24);
-            this.regenerateIDsToolStripMenuItem.Text = "Regenerate IDs";
-            this.regenerateIDsToolStripMenuItem.Click += new System.EventHandler(this.regenerateIDsToolStripMenuItem_Click);
+            this.removePilotToolStripMenuItem.Name = "removePilotToolStripMenuItem";
+            this.removePilotToolStripMenuItem.Size = new System.Drawing.Size(179, 24);
+            this.removePilotToolStripMenuItem.Text = "Remove Pilot";
+            this.removePilotToolStripMenuItem.Click += new System.EventHandler(this.removePilotToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -391,6 +400,7 @@
         private System.Windows.Forms.ToolStripMenuItem cleanupToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem moveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem regenerateIDsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removePilotToolStripMenuItem;
     }
 }
 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -28,7 +29,7 @@ namespace SpaceEditor
         private Sector sector;
         private MyObjectBuilder_Sector mySector = null;
 
-        private string myVersion = "2.0.2";
+        private string myVersion = "2.0.3";
         private bool loggingEnabled = false;
         public string Log = "";
         public string steam_install_path = "";
@@ -596,17 +597,36 @@ namespace SpaceEditor
         private TreeNode newCubeGridNode(MyObjectBuilder_CubeGrid myGrid)
         {
             TreeNode node = null;
+            string hasPilot = "";
+            TreeNode pilotNode = null;
+            foreach (MyObjectBuilder_CubeBlock cb in myGrid.CubeBlocks)
+            {
+                if (cb.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.Cockpit)
+                {
+                    MyObjectBuilder_Cockpit cockpit = (MyObjectBuilder_Cockpit)cb;
+                    if (cockpit.Pilot != null)
+                    {
+                        hasPilot = "**";
+                        pilotNode = new TreeNode("Pilot");
+                        pilotNode.Tag = cockpit;
+                        pilotNode.Name = "Pilot";
+                    }
+                }
+            }
             if (myGrid.GridSizeEnum == MyCubeSize.Small)
-                node = new TreeNode("Small Ship [" + myGrid.CubeBlocks.Count()+"]");
+                node = new TreeNode("Small Ship [" + myGrid.CubeBlocks.Count()+"]"+hasPilot);
             if (myGrid.GridSizeEnum == MyCubeSize.Large)
                 if (myGrid.IsStatic)
-                    node = new TreeNode("Station [" + myGrid.CubeBlocks.Count() + "]");
+                    node = new TreeNode("Station [" + myGrid.CubeBlocks.Count() + "]" + hasPilot);
                 else
-                    node = new TreeNode("Large Ship [" + myGrid.CubeBlocks.Count() + "]");
+                    node = new TreeNode("Large Ship [" + myGrid.CubeBlocks.Count() + "]" + hasPilot);
             node.Tag = myGrid;
+            
             node.Nodes.Add(new TreeNode(myGrid.EntityId.ToString()));
             node.Nodes.Add(new TreeNode(myGrid.PositionAndOrientation.ToString()));
             node.Nodes.Add(myGrid.CubeBlocks.Count()+" Blocks");
+            if (hasPilot != "")
+                node.Nodes.Add(pilotNode);
             return node;
         }
 
@@ -905,6 +925,67 @@ namespace SpaceEditor
             private void SectorTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
             {
                 SectorTree.SelectedNode = e.Node;
+            }
+
+            private void removePilotToolStripMenuItem_Click(object sender, EventArgs e)
+            {
+                TreeNode node = SectorTree.SelectedNode;
+                MyObjectBuilder_Sector sector = (MyObjectBuilder_Sector)node.Parent.Parent.Tag;
+                Console.WriteLine("in method");
+                
+                if (node.Nodes.ContainsKey("Pilot"))
+                {
+                    Console.WriteLine("Contains Pilot");
+                    TreeNode pilotNode = node.Nodes[node.Nodes.IndexOfKey("Pilot")];
+                    MyObjectBuilder_Cockpit cockpit = (MyObjectBuilder_Cockpit)pilotNode.Tag;
+                    long Pilot_id = 0;
+                    if (cockpit.Pilot != null)
+                    {
+                        DialogResult dialogResult = MessageBox.Show("Overwrite \"" + SectorTree.SelectedNode.Parent.Parent.Text + "\"?", "Save", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            MyObjectBuilder_Character pilot = (MyObjectBuilder_Character)cockpit.Pilot;
+                            MyObjectBuilder_Character newPilot = (MyObjectBuilder_Character)pilot.Clone();
+                            MyPositionAndOrientation newpos = (MyPositionAndOrientation)newPilot.PositionAndOrientation;
+                            newpos.Position.X = 0;
+                            newpos.Position.Y = 0;
+                            newpos.Position.Z = 0;
+                            newPilot.PositionAndOrientation = newpos;
+                            newPilot.AutoenableJetpackDelay = 0;
+                            newPilot.JetpackEnabled = true;
+                            newPilot.Battery.ProducerEnabled = true;
+                            cockpit.Pilot = null;
+                            sector.SectorObjects.Add(newPilot);
+                            Pilot_id = newPilot.EntityId;
+                            string file = Path.Combine(this.saves_path, SectorTree.SelectedNode.Parent.Parent.Text, "SANDBOX_0_0_0_.sbs");
+                            string backupfile = Path.Combine(this.saves_path, SectorTree.SelectedNode.Parent.Parent.Text, "SANDBOX_0_0_0_.BAK2");
+                            if (File.Exists(backupfile))
+                                File.Delete(backupfile);
+                            File.Move(file, backupfile);
+                            label1.Text = "Saving...";
+                            MyObjectBuilder_Sector mySector = (MyObjectBuilder_Sector)SectorTree.SelectedNode.Parent.Parent.Tag;
+                            using (FileStream sr = File.Open(file, FileMode.Create))
+                            {
+                                MyObjectBuilder_Base.SerializeXML(sr, mySector);
+                                sr.Dispose();
+                            }
+                            //now update the sbc file
+                            String sbcfile = Path.Combine(this.saves_path, node.Parent.Parent.Text, "Sandbox.sbc");
+                            XDocument sbcFile = XDocument.Load(sbcfile);
+                            sbcFile.Root.SetElementValue("ControlledObject", Pilot_id);
+                            sbcFile.Save(sbcfile);
+                            this.create_tree(node.Parent.Parent, mySector);
+                            label1.Text = "";
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        
+                    }
+                   
+                }
+
             }
 
       
