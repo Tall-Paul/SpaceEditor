@@ -16,8 +16,8 @@ using System.Diagnostics;
 using System.Windows.Media.Media3D;
 using Microsoft.Win32;
 using System.Security.Permissions;
-using Sandbox.CommonLib.ObjectBuilders;
-using Sandbox.CommonLib.ObjectBuilders.Voxels;
+using Sandbox.Common.ObjectBuilders;
+using Sandbox.Common.ObjectBuilders.Voxels;
 
 [assembly: RegistryPermissionAttribute(SecurityAction.RequestMinimum,
     ViewAndModify = "HKEY_CURRENT_USER")]
@@ -469,17 +469,17 @@ namespace SpaceEditor
                     else
                         MessageBox.Show("Unable to locate VRage Math Library!!");
                 }
-                if (!File.Exists(Path.Combine(current_path, "SandBox.CommonLib.dll")))
+                if (!File.Exists(Path.Combine(current_path, "SandBox.Common.dll")))
                 {
-                    if (File.Exists(Path.Combine(this.steam_install_path, "SandBox.CommonLib.dll")))
-                        File.Copy(Path.Combine(this.steam_install_path, "SandBox.CommonLib.dll"), Path.Combine(current_path, "SandBox.CommonLib.dll"));
+                    if (File.Exists(Path.Combine(this.steam_install_path, "SandBox.Common.dll")))
+                        File.Copy(Path.Combine(this.steam_install_path, "SandBox.Common.dll"), Path.Combine(current_path, "SandBox.Common.dll"));
                     else
                         MessageBox.Show("Unable to locate SandBox Common Library!!");
                 }
-                if (!File.Exists(Path.Combine(current_path, "SandBox.CommonLib.XmlSerializers.dll")))
+                if (!File.Exists(Path.Combine(current_path, "SandBox.Common.XmlSerializers.dll")))
                 {
-                    if (File.Exists(Path.Combine(this.steam_install_path, "SandBox.CommonLib.XmlSerializers.dll")))
-                        File.Copy(Path.Combine(this.steam_install_path, "SandBox.CommonLib.XmlSerializers.dll"), Path.Combine(current_path, "SandBox.CommonLib.XmlSerializers.dll"));
+                    if (File.Exists(Path.Combine(this.steam_install_path, "SandBox.Common.XmlSerializers.dll")))
+                        File.Copy(Path.Combine(this.steam_install_path, "SandBox.Common.XmlSerializers.dll"), Path.Combine(current_path, "SandBox.Common.XmlSerializers.dll"));
                     else
                         MessageBox.Show("Unable to locate SandBox Common Library!!");
                 }
@@ -581,12 +581,12 @@ namespace SpaceEditor
         {
             using (MemoryStream input_stream = new MemoryStream())
             {
-                MyObjectBuilder_Base.Serialize(input_stream, old_grid);                
+                MyObjectBuilder_Base.SerializeXML(input_stream, old_grid);                
                 MyObjectBuilder_CubeGrid new_grid = (MyObjectBuilder_CubeGrid)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.CubeGrid);
                 using (MemoryStream output_stream = new MemoryStream()){
                     input_stream.CopyTo(output_stream);
                     output_stream.Seek(0, 0);
-                    MyObjectBuilder_Base.Deserialize(output_stream, out new_grid);
+                    MyObjectBuilder_Base.DeserializeXML(output_stream, out new_grid);
                 }
                 
                 return new_grid;
@@ -601,7 +601,7 @@ namespace SpaceEditor
             TreeNode pilotNode = null;
             foreach (MyObjectBuilder_CubeBlock cb in myGrid.CubeBlocks)
             {
-                if (cb.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.Cockpit)
+                if (cb.TypeId == MyObjectBuilderTypeEnum.Cockpit)
                 {
                     MyObjectBuilder_Cockpit cockpit = (MyObjectBuilder_Cockpit)cb;
                     if (cockpit.Pilot != null)
@@ -635,9 +635,9 @@ namespace SpaceEditor
                 TreeNode ships = new TreeNode("Ships / Stations");
                 TreeNode VoxelMaps = new TreeNode("Asteroids / Moons");
                 TreeNode node = null;
-                foreach (Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_EntityBase eb in mySector.SectorObjects)
+                foreach (Sandbox.Common.ObjectBuilders.MyObjectBuilder_EntityBase eb in mySector.SectorObjects)
                 {
-                    switch(eb.GetObjectBuilderTypeId()){
+                    switch(eb.TypeId){
                         case MyObjectBuilderTypeEnum.VoxelMap:
                             MyObjectBuilder_VoxelMap myMap = (MyObjectBuilder_VoxelMap)eb;
                             node = new TreeNode("Asteroid");
@@ -687,7 +687,7 @@ namespace SpaceEditor
                     string filename = saveFileDialog2.FileName;
                     TreeNode node = SectorTree.SelectedNode;
                     MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
-                    switch (myBase.GetObjectBuilderTypeId())
+                    switch (myBase.TypeId)
                     {
                         case MyObjectBuilderTypeEnum.CubeGrid:                            
                             using (FileStream sr = File.Open(filename, FileMode.Create))
@@ -709,7 +709,7 @@ namespace SpaceEditor
             {
                 TreeNode node = SectorTree.SelectedNode;
                 MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
-                if (myBase.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.CubeGrid)
+                if (myBase.TypeId == MyObjectBuilderTypeEnum.CubeGrid)
                 {                    
 
                    MyObjectBuilder_CubeGrid myGrid = this.clone_grid((MyObjectBuilder_CubeGrid)myBase);                    
@@ -723,7 +723,7 @@ namespace SpaceEditor
             {
                 TreeNode node = SectorTree.SelectedNode;
                 MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
-                if (myBase.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.CubeGrid)
+                if (myBase.TypeId == MyObjectBuilderTypeEnum.CubeGrid)
                 {
                     MyObjectBuilder_CubeGrid myGrid = (MyObjectBuilder_CubeGrid)myBase;
                     if (myGrid.GridSizeEnum == MyCubeSize.Large)
@@ -749,14 +749,14 @@ namespace SpaceEditor
                 string file = Path.Combine(this.saves_path, SectorTree.SelectedNode.Text, "SANDBOX_0_0_0_.sbs");
                 if (File.Exists(file))
                 {
-                    Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Base sec = Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Base.CreateNewObject(Sandbox.CommonLib.ObjectBuilders.MyObjectBuilderTypeEnum.Sector);
-                    MyObjectBuilder_Sector mySector = (Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Sector)sec;
+                    Sandbox.Common.ObjectBuilders.MyObjectBuilder_Base sec = Sandbox.Common.ObjectBuilders.MyObjectBuilder_Base.CreateNewObject(Sandbox.Common.ObjectBuilders.MyObjectBuilderTypeEnum.Sector);
+                    MyObjectBuilder_Sector mySector = (Sandbox.Common.ObjectBuilders.MyObjectBuilder_Sector)sec;
                     Console.WriteLine(mySector.Position.ToString());
                     try
                     {
                         using (FileStream sr = File.Open(file, FileMode.Open))
                         {
-                            if (Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Base.DeserializeXML(sr, out mySector))
+                            if (Sandbox.Common.ObjectBuilders.MyObjectBuilder_Base.DeserializeXML(sr, out mySector))
                             {
                                 this.create_tree(SectorTree.SelectedNode, mySector);
                             }
@@ -826,7 +826,7 @@ namespace SpaceEditor
                     MyObjectBuilder_CubeGrid MyCubeGrid = (MyObjectBuilder_CubeGrid)MyObjectBuilder_Base.CreateNewObject(MyObjectBuilderTypeEnum.CubeGrid);                    
                     using (FileStream sr = File.Open(filename, FileMode.Open))
                     {
-                        if (Sandbox.CommonLib.ObjectBuilders.MyObjectBuilder_Base.DeserializeXML(sr, out MyCubeGrid))
+                        if (Sandbox.Common.ObjectBuilders.MyObjectBuilder_Base.DeserializeXML(sr, out MyCubeGrid))
                         {
                             TreeNode savegame_node = SectorTree.SelectedNode;
                             MyObjectBuilder_Sector mySector = (MyObjectBuilder_Sector)savegame_node.Tag;
@@ -867,7 +867,7 @@ namespace SpaceEditor
             {
                 TreeNode node = SectorTree.SelectedNode;
                 MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
-                if (myBase.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.CubeGrid)
+                if (myBase.TypeId == MyObjectBuilderTypeEnum.CubeGrid)
                 {
                     MyObjectBuilder_CubeGrid myGrid = (MyObjectBuilder_CubeGrid)myBase;
                     TreeNode SectorNode = node.Parent.Parent;
@@ -884,7 +884,7 @@ namespace SpaceEditor
             {
                 TreeNode node = SectorTree.SelectedNode;
                 MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
-                if (myBase.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.CubeGrid)
+                if (myBase.TypeId == MyObjectBuilderTypeEnum.CubeGrid)
                 {
                     MyObjectBuilder_CubeGrid myGrid = (MyObjectBuilder_CubeGrid)myBase;
                     Form2 newform = new Form2(this);
@@ -898,7 +898,7 @@ namespace SpaceEditor
             {
                 TreeNode node = SectorTree.SelectedNode;
                 MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
-                if (myBase.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.CubeGrid)
+                if (myBase.TypeId == MyObjectBuilderTypeEnum.CubeGrid)
                 {
                     MyObjectBuilder_CubeGrid myGrid = (MyObjectBuilder_CubeGrid)myBase;
                     MyPositionAndOrientation pos = (MyPositionAndOrientation)myGrid.PositionAndOrientation;
@@ -913,7 +913,7 @@ namespace SpaceEditor
             {
                  TreeNode node = SectorTree.SelectedNode;
                 MyObjectBuilder_Base myBase = (MyObjectBuilder_Base)node.Tag;
-                if (myBase.GetObjectBuilderTypeId() == MyObjectBuilderTypeEnum.CubeGrid)
+                if (myBase.TypeId == MyObjectBuilderTypeEnum.CubeGrid)
                 {
                     MyObjectBuilder_CubeGrid myGrid = (MyObjectBuilder_CubeGrid)myBase;
                     this.regenerateIDs(myGrid);
